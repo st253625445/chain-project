@@ -34,7 +34,7 @@ service.interceptors.response.use(
     const res = response.data;
     if (res.type === "application/x-download") {
       return response.data;
-    } else if (res.msg !== "success") {
+    } else if (res.msg && res.msg !== "success") {
       Message({
         message: res.msg,
         type: "error",
@@ -52,12 +52,17 @@ service.interceptors.response.use(
             type: "warning"
           }
         ).then(() => {
-          store.dispatch("FedLogOut").then(() => {
+          store.dispatch("LogOut").then(() => {
             location.reload(); // 为了重新实例化vue-router对象 避免bug
           });
         });
       }
       return Promise.reject("error");
+    } else if (res.code === 90003) {
+      // debugger;
+      // store.dispatch("LogOut").then(() => {
+      //   location.reload(); // 为了重新实例化vue-router对象 避免bug
+      // });
     } else {
       return response.data;
     }

@@ -1,13 +1,10 @@
 import request from "@/utils/request";
 
-export function login(username, password) {
+export function login(json, type) {
   return request({
-    url: "/login",
+    url: `/user/login/${type}`,
     method: "post",
-    data: {
-      username,
-      password
-    }
+    data: json
   });
 }
 

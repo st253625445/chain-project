@@ -1,13 +1,10 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    <div
-      v-if="device === 'mobile' && sidebar.opened"
-      class="drawer-bg"
-      @click="handleClickOutside"
-    />
-    <sidebar class="sidebar-container" />
-    <div class="main-container">
+  <div class="app-wrapper">
+    <div class="header">
       <Header />
+    </div>
+    <div class="main-container">
+      <sidebar class="sidebar-container" />
       <app-main />
     </div>
   </div>
@@ -15,7 +12,6 @@
 
 <script>
 import { Header, Sidebar, AppMain } from "./components";
-import ResizeMixin from "./mixin/ResizeHandler";
 
 export default {
   name: "Layout",
@@ -24,33 +20,12 @@ export default {
     Sidebar,
     AppMain
   },
-  mixins: [ResizeMixin],
-  computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar;
-    },
-    device() {
-      return this.$store.state.app.device;
-    },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === "mobile"
-      };
-    }
-  },
-  methods: {
-    handleClickOutside() {
-      this.$store.dispatch("CloseSideBar", { withoutAnimation: false });
-    }
-  }
+  methods: {}
 };
 </script>
 
 <style lang="less" scoped>
-@import "../../styles/mixin.less";
+@import "../../style/mixin.less";
 .app-wrapper {
   @clearfix();
   position: relative;
@@ -59,6 +34,12 @@ export default {
   &.mobile.openSidebar {
     position: fixed;
     top: 0;
+  }
+  > .header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 20;
   }
 }
 .drawer-bg {

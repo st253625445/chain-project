@@ -1,53 +1,19 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
-    <hamburger
-      :toggle-click="toggleSideBar"
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-    />
-    <breadcrumb />
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <svg-icon icon-class="user" class="user-avatar" />
-      </div>
-      <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>首页</el-dropdown-item>
-        </router-link>
-        <el-dropdown-item divided>
-          <span style="display:block;" @click="logout">登出</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-  </el-menu>
+  <Header />
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
+import Header from "@/components/common/headerNav";
 
 export default {
   components: {
-    Breadcrumb,
-    Hamburger
+    Header
   },
   data() {
     return {};
   },
-  computed: {
-    ...mapGetters(["sidebar", "avatar"])
-  },
-  methods: {
-    toggleSideBar() {
-      this.$store.dispatch("ToggleSideBar");
-    },
-    logout() {
-      this.$store.dispatch("FedLogOut").then(() => {
-        location.reload(); // 为了重新实例化vue-router对象 避免bug
-      });
-    }
-  }
+  computed: {},
+  methods: {}
 };
 </script>
 

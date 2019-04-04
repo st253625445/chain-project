@@ -6,7 +6,7 @@
           !onlyOneChild.children &&
           !item.alwaysShow
       "
-      :to="resolvePath(onlyOneChild.path)"
+      :to="{ path: resolvePath(onlyOneChild.path), query: query }"
     >
       <el-menu-item
         :index="resolvePath(onlyOneChild.path)"
@@ -45,7 +45,11 @@
             :base-path="resolvePath(child.path)"
             class="nest-menu"
           />
-          <router-link v-else :to="resolvePath(child.path)" :key="child.name">
+          <router-link
+            v-else
+            :to="{ path: resolvePath(child.path), query: query }"
+            :key="child.name"
+          >
             <el-menu-item :index="resolvePath(child.path)">
               <svg-icon
                 v-if="child.meta && child.meta.icon"
@@ -80,6 +84,10 @@ export default {
     basePath: {
       type: String,
       default: ""
+    },
+    query: {
+      type: Object,
+      required: true
     }
   },
   data() {
