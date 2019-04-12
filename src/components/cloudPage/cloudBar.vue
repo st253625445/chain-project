@@ -1,13 +1,8 @@
 <template>
-  <div class="cloudBarBox">
+  <div class="cloudBarBox" v-loading="cloudLoading">
     <div id="cloudBar"></div>
     <div class="industryTable">
-      <el-table
-        :data="tableData"
-        class="industryTable"
-        border
-        style="width: 100%"
-      >
+      <el-table :data="tableData" style="width: 100%">
         <el-table-column
           prop="title"
           label="排名"
@@ -28,7 +23,7 @@
 import echarts from "echarts";
 // import { dateFormat } from '@/config/filter.js'
 export default {
-  props: ["data"],
+  props: ["data", "cloudLoading"],
   data() {
     return {
       dataAxis: [],
@@ -58,6 +53,7 @@ export default {
     // 整理data
     splitData(data) {
       let allData = data.barGraph;
+      if (!allData) return false;
       let _tableData = data.hotCounts;
       this.totalValue = data.totalCount;
       for (let i = 0; i < allData.length; i++) {
@@ -76,7 +72,6 @@ export default {
           value: `${_tableData[i].sumPercent}%`
         });
       }
-      console.log(this.optionData);
     },
     init() {
       let myCharts = echarts.init(document.getElementById("cloudBar"));
@@ -100,8 +95,17 @@ export default {
             show: false
           },
           axisLabel: {
+            interval: 0,
             textStyle: {
               color: "#999"
+            },
+            formatter: function(value) {
+              let _len = value.length;
+              let tempStr = "";
+              for (let i = 0; i < _len; i++) {
+                tempStr += value[i] + "\n";
+              }
+              return tempStr;
             }
           }
         },
@@ -109,6 +113,7 @@ export default {
           {
             interval: totalValue / 10,
             max: totalValue,
+            name: "成员数(个)",
             nameTextStyle: {
               color: "#999"
             },
@@ -130,6 +135,7 @@ export default {
           },
           {
             max: 100,
+            name: "累计占比",
             nameTextStyle: {
               color: "#999"
             },
@@ -150,33 +156,12 @@ export default {
             }
           }
         ],
-        dataZoom: [
-          {
-            type: "inside",
-            start: 0,
-            end: 50
-          },
-          {
-            start: 0,
-            end: 50,
-            top: 380,
-            bottom: 15,
-            minSpan: 20,
-            handleIcon:
-              "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
-            handleSize: "20px",
-            handleStyle: {
-              color: "#fff",
-              shadowBlur: 3,
-              shadowColor: "rgba(0, 0, 0, 0.6)",
-              shadowOffsetX: 2,
-              shadowOffsetY: 2
-            },
-            showDataShadow: false
-          }
-        ],
         grid: {
-          top: 50
+          containLabel: true,
+          top: 50,
+          left: 20,
+          right: 20,
+          bottom: 0
         },
         tooltip: {
           trigger: "axis",
@@ -252,10 +237,11 @@ export default {
     height: 400px;
   }
   .industryTable {
-    margin-top: 20px;
+    padding: 20px;
     .el-table td,
     .el-table th {
       text-align: center;
+      border-bottom: none;
     }
     .el-table td {
       padding: 16px 0;

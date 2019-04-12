@@ -1,18 +1,10 @@
 <template>
-  <div class="indexPage">
-    <div class="chainTotalBox">
-      <span
-        v-for="(item, index) in chainTotalDatas"
-        :key="index"
-        class="chainTotalItem"
-        >{{ item.name }} {{ item.data }}</span
-      >
-    </div>
-    <div class="chainBox">
-      <chain-pane />
-    </div>
-    <div class="chainList">
-      <p class="title">产业链成员分类统计</p>
+  <div class="membersPage">
+    <div class="membersList">
+      <p class="title">
+        产业链龙头成员
+        <span class="subTitle">集成电路产业链中，龙头成员54名</span>
+      </p>
       <el-table
         ref="multipleTable"
         :data="tableData"
@@ -24,19 +16,32 @@
       >
         <el-table-column
           type="selection"
-          width="100"
+          width="85"
           label-class-name="selectLable"
         >
         </el-table-column>
-        <el-table-column label="产业链板块">
-          <template slot-scope="scope">{{ scope.row.name }}</template>
+        <el-table-column type="index" label="序号"> </el-table-column>
+        <el-table-column prop="name" label="企业名称"></el-table-column>
+        <el-table-column prop="hy" label="产业链板块"> </el-table-column>
+        <el-table-column prop="data1" label="主要产品"> </el-table-column>
+        <el-table-column label="所在集团">
+          <template slot-scope="scope" @click="click1Fn(scope.row)"
+            >详情</template
+          >
         </el-table-column>
-        <el-table-column prop="hy" label="行业"> </el-table-column>
-        <el-table-column prop="data1" label="龙头企业" sortable>
+        <el-table-column label="企业关联方">
+          <template slot-scope="scope" @click="click1Fn(scope.row)"
+            >详情</template
+          >
         </el-table-column>
-        <el-table-column prop="data2" label="核心企业" sortable>
+        <el-table-column prop="data1" label="最新股价(元)" sortable>
         </el-table-column>
-        <el-table-column prop="data3" label="普通企业" sortable>
+        <el-table-column prop="data1" label="市值(亿元)" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="市盈" sortable> </el-table-column>
+        <el-table-column prop="data1" label="去年总收入" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="去年净利润" sortable>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -53,38 +58,10 @@
 </template>
 
 <script>
-import chainPane from "@/components/indexPage/chainCanvas";
-import { chainCategories } from "@/api/getData";
+import { getRelatedList } from "@/api/getData";
 export default {
   data() {
     return {
-      chainTotalDatas: [
-        {
-          name: "小微企业",
-          data: 15273
-        },
-        {
-          name: "小微企业",
-          data: 15273
-        },
-        {
-          name: "小微企业",
-          data: 15273
-        },
-        {
-          name: "小微企业",
-          data: 15273
-        },
-        {
-          name: "小微企业",
-          data: 15273
-        },
-        {
-          name: "小微企业",
-          data: 15273
-        }
-      ],
-      multipleSelection: [],
       tableData: [
         {
           name: "xxx产业链",
@@ -131,19 +108,32 @@ export default {
       ]
     };
   },
-  components: { chainPane },
   mounted() {
-    chainCategories().then(res => {
-      console.log(res);
-    });
+    let query = this.$route.query;
+    if (query.nodeName) {
+      this.getRelatedList(query.nodeName);
+    }
   },
   methods: {
+    // 获取列表
+    getRelatedList(name) {
+      getRelatedList(name)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(rej => {
+          console.log(rej);
+        });
+    },
     // 勾选改变
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
     // 排序改变
     sortChange(params) {
+      console.log(params);
+    },
+    click1Fn(params) {
       console.log(params);
     },
     // 页码每页条数改变
@@ -159,43 +149,27 @@ export default {
 </script>
 
 <style lang="less">
-.indexPage {
+.membersPage {
   width: 100%;
   padding: 20px;
-  > div {
+  .title {
+    font-size: 16px;
+    line-height: 60px;
+    color: #1027ad;
+    .subTitle {
+      display: inline-block;
+      text-indent: 20px;
+      font-size: 12px;
+      color: rgb(170, 170, 170);
+      line-height: 1.2;
+    }
+  }
+  .membersList {
     width: 100%;
+    padding: 0 20px;
     background: #fff;
     border: 1px solid #eeeeee;
     margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  .chainTotalBox {
-    padding: 20px 5px 10px;
-    .chainTotalItem {
-      display: inline-block;
-      height: 30px;
-      padding: 0 5px;
-      margin-bottom: 10px;
-      margin-left: 5px;
-      margin-right: 5px;
-      border: 1px solid #4b61e7;
-      color: #4b61e7;
-      font-size: 14px;
-      line-height: 28px;
-    }
-  }
-  .chainBox {
-    height: 602px;
-  }
-  .chainList {
-    padding: 0 20px 20px;
-    .title {
-      font-size: 16px;
-      line-height: 60px;
-      color: #1027ad;
-    }
     .el-table .cell {
       text-align: center;
     }
@@ -216,6 +190,7 @@ export default {
     }
     .el-pagination {
       text-align: center;
+      padding-bottom: 20px;
     }
   }
 }

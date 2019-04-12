@@ -52,7 +52,7 @@ export const constantRouterMap = [
         path: "",
         name: "members",
         meta: { title: "产业链成员" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/members")
       }
     ]
   },
@@ -64,7 +64,7 @@ export const constantRouterMap = [
         path: "",
         name: "portrait",
         meta: { title: "行业画像" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/portrait")
       }
     ]
   },
@@ -88,7 +88,7 @@ export const constantRouterMap = [
         path: "",
         name: "scale",
         meta: { title: "产业规模" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/scale")
       }
     ]
   },
@@ -100,7 +100,7 @@ export const constantRouterMap = [
         path: "",
         name: "fund",
         meta: { title: "产业基金" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/fund")
       }
     ]
   },
@@ -112,7 +112,7 @@ export const constantRouterMap = [
         path: "",
         name: "financing",
         meta: { title: "并购融资事件" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/financing")
       }
     ]
   },
@@ -124,7 +124,7 @@ export const constantRouterMap = [
         path: "",
         name: "information",
         meta: { title: "资讯与行研" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/information")
       }
     ]
   },
@@ -136,7 +136,7 @@ export const constantRouterMap = [
         path: "",
         name: "park",
         meta: { title: "产业园区" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/park")
       }
     ]
   },
@@ -148,11 +148,16 @@ export const constantRouterMap = [
         path: "",
         name: "associations",
         meta: { title: "协会联盟" },
-        component: () => import("@/views/pages/index")
+        component: () => import("@/views/pages/associations")
       }
     ]
   },
-  { path: "*", redirect: "/404", hidden: true }
+  {
+    path: "/pdf",
+    component: () => import("@/views/pages/pdf"),
+    hidden: true
+  }
+  // { path: "*", redirect: "/404", hidden: true }
 ];
 
 const router = new Router({

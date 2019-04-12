@@ -19,23 +19,23 @@
           @keyup.enter.native="submitForm('loginForm')"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="passwd">
+      <el-form-item prop="password">
         <span class="icon"><i class="iconfont">&#xe6a6;</i></span>
         <el-input
           type="password"
-          v-model="loginForm.passwd"
+          v-model="loginForm.password"
           placeholder="请输入密码"
           autocomplete="off"
           @keyup.enter.native="submitForm('loginForm')"
         ></el-input>
       </el-form-item>
       <el-form-item class="el-form-item-buttonbox">
-        <div class="forget-pass" style="text-align:left;padding-top:10px;">
+        <!-- <div class="forget-pass" style="text-align:left;padding-top:10px;">
           <a href="javascript:;" @click="changeForm">手机密码登录</a>
           <a class="fr" href="javascript:;" @click="linkcallback('3')"
             >忘记密码？</a
           >
-        </div>
+        </div> -->
         <div class="button-main">
           <el-button
             @click="submitForm('loginForm')"
@@ -129,7 +129,7 @@ export default {
       codelength: 4,
       loginForm: {
         username: "",
-        passwd: ""
+        password: ""
       },
       phoneloginForm: {
         mobile: "",
@@ -140,7 +140,7 @@ export default {
           { required: true, message: "账号不能为空", trigger: "blur" },
           { min: 4, max: 8, message: "账号格式错误", trigger: "blur" }
         ],
-        passwd: [
+        password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
           { min: 4, max: 16, message: "密码格式错误", trigger: "blur" }
         ],

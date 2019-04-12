@@ -14,7 +14,7 @@ service.defaults.baseURL = "/api";
 service.interceptors.request.use(
   config => {
     if (store.getters.token) {
-      config.headers["X-Token"] = getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers["authToken"] = getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config;
   },
@@ -60,9 +60,9 @@ service.interceptors.response.use(
       return Promise.reject("error");
     } else if (res.code === 90003) {
       // debugger;
-      // store.dispatch("LogOut").then(() => {
-      //   location.reload(); // 为了重新实例化vue-router对象 避免bug
-      // });
+      store.dispatch("LogOut").then(() => {
+        location.reload(); // 为了重新实例化vue-router对象 避免bug
+      });
     } else {
       return response.data;
     }

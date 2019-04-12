@@ -36,14 +36,17 @@
             发送
           </button>
         </el-form-item>
-        <el-form-item prop="newPasswd">
+        <el-form-item prop="newPassword">
           <span class="icon"><i class="iconfont">&#xe641;</i></span>
-          <el-input v-model="ruleForm.newPasswd" placeholder="密码"></el-input>
+          <el-input
+            v-model="ruleForm.newPassword"
+            placeholder="密码"
+          ></el-input>
         </el-form-item>
-        <el-form-item prop="confirmPasswd">
+        <el-form-item prop="confirmPassword">
           <span class="icon"><i class="iconfont">&#xe642;</i></span>
           <el-input
-            v-model="ruleForm.confirmPasswd"
+            v-model="ruleForm.confirmPassword"
             placeholder="确认密码"
           ></el-input>
         </el-form-item>
@@ -73,7 +76,7 @@ export default {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.newPasswd) {
+      } else if (value !== this.ruleForm.newPassword) {
         callback(new Error("两次密码输入不一致"));
       } else {
         callback();
@@ -87,8 +90,8 @@ export default {
       ruleForm: {
         mobile: "",
         smsCode: "", // 验证码
-        newPasswd: "",
-        confirmPasswd: ""
+        newPassword: "",
+        confirmPassword: ""
       },
       rules: {
         mobile: [
@@ -103,11 +106,11 @@ export default {
           { required: true, message: "验证码不能为空", trigger: "blur" },
           { pattern: /^\d{4}$/, message: "请输入正确的验证码", trigger: "blur" }
         ],
-        newPasswd: [
+        newPassword: [
           { required: true, message: "密码不能为空", trigger: "blur" },
           { min: 4, max: 16, message: "密码格式错误", trigger: "blur" }
         ],
-        confirmPasswd: [{ validator: validatePass, trigger: "blur" }]
+        confirmPassword: [{ validator: validatePass, trigger: "blur" }]
       }
     };
   },

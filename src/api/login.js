@@ -1,13 +1,23 @@
 import request from "@/utils/request";
 
-export function login(json, type) {
+// 用户登录
+export function login(json) {
   return request({
-    url: `/user/login/${type}`,
+    url: `/user/account/login`,
     method: "post",
+    dataType: "json",
     data: json
   });
 }
-
+// 用户注册
+export function regist(json) {
+  return request({
+    url: `/user/account/regist`,
+    method: "post",
+    dataType: "json",
+    data: json
+  });
+}
 export function getInfo(token) {
   return request({
     url: "/user/info",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-wrap-main" v-show="!isRegister">
-      <p class="header-title">申请试用</p>
+      <p class="header-title">注册账号</p>
       <div>
         <el-form
           :model="ruleForm"
@@ -10,30 +10,29 @@
           ref="ruleForm"
           class="mod-register-form"
         >
-          <el-form-item prop="mobile">
-            <span class="icon"><i class="iconfont">&#xe640;</i></span>
+          <el-form-item prop="username">
+            <span class="icon"><i class="iconfont">&#xe60d;</i></span>
             <el-input
-              v-model.trim="ruleForm.mobile"
-              placeholder="手机号码"
-              :maxlength="phonelength"
+              v-model.trim="ruleForm.username"
+              placeholder="用户名"
+              autocomplete="off"
             ></el-input>
           </el-form-item>
-          <el-form-item prop="smsCode" class="authcode-buttonbox">
-            <span class="icon"><i class="iconfont">&#xe63e;</i></span>
+          <el-form-item prop="password">
+            <span class="icon"><i class="iconfont">&#xe6a6;</i></span>
             <el-input
-              v-model.trim="ruleForm.smsCode"
-              placeholder="验证码"
-              :maxlength="codelength"
+              type="password"
+              v-model="ruleForm.password"
+              placeholder="请输入密码"
             ></el-input>
-            <button
-              type="button"
-              class="send-authcode"
-              :disabled="ruleForm.mobile == ''"
-              @click="sendAuthcode"
-              ref="authcodebtn"
-            >
-              发送
-            </button>
+          </el-form-item>
+          <el-form-item prop="password2">
+            <span class="icon"><i class="iconfont">&#xe6a6;</i></span>
+            <el-input
+              type="password"
+              v-model="ruleForm.password2"
+              placeholder="确认密码"
+            ></el-input>
           </el-form-item>
           <el-form-item prop="companyName">
             <span class="icon"><i class="iconfont">&#xe6ac;</i></span>
@@ -76,7 +75,7 @@
   </div>
 </template>
 <script>
-import { trialApply, getAuthCode } from "@/api/getData";
+import { regist } from "@/api/login";
 export default {
   props: ["ispc"],
   data() {
@@ -87,18 +86,32 @@ export default {
       codeTimer: null,
       canAuthcode: false,
       ruleForm: {
-        mobile: "",
+        userName: "",
+        password: "",
+        password2: "",
         companyName: "",
         email: "",
-        smsCode: "", // 验证码
         invitationCode: "" // 邀请码
       },
       rules: {
-        mobile: [
-          { required: true, message: "手机号不能为空", trigger: "blur" },
+        userName: [
+          { required: true, message: "账号不能为空", trigger: "blur" },
+          { min: 4, max: 8, message: "账号格式错误", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 4, max: 16, message: "密码格式错误", trigger: "blur" }
+        ],
+        password2: [
+          { required: true, message: "确认密码不能为空", trigger: "blur" },
+          { min: 4, max: 16, message: "密码格式错误", trigger: "blur" },
           {
-            pattern: /^((400[0-9]{7})|(800[0-9]{7})|(0\d{2,3}-\d{7,8}(-\d{1,6})?$)|([1](([3][0-9])|([4][5,7,9])|([5][4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}))$/,
-            message: "请输入正确的手机号码",
+            required: true,
+            validator: (rule, value, callback) => {
+              if (value !== this.ruleForm.password) {
+                return callback(new Error("确认密码需与密码一致"));
+              }
+            },
             trigger: "blur"
           }
         ],
@@ -113,10 +126,6 @@ export default {
             trigger: "blur,change"
           }
         ],
-        smsCode: [
-          { required: true, message: "验证码不能为空", trigger: "blur" },
-          { pattern: /^\d{4}$/, message: "请输入正确的验证码", trigger: "blur" }
-        ],
         invitationCode: [
           { pattern: /^\d{4}$/, message: "请输入正确的邀请码", trigger: "blur" }
         ]
@@ -124,56 +133,49 @@ export default {
     };
   },
   methods: {
-    tryRegister(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.register();
-          return false;
-        } else {
-          return false;
-        }
-      });
+    tryRegister() {
+      this.register();
     },
     async register() {
-      let res = await trialApply(this.ruleForm);
+      let res = await regist(this.ruleForm);
       if (res.code === 200) {
         this.sureCallback();
       } else {
         this.$message.error(res.error);
       }
     },
-    async getAuthCode() {
-      let res = await getAuthCode(this.ruleForm.mobile, "apply");
-      if (res.code === 200) {
-        let authcodebtn = this.$refs.authcodebtn;
-        this.getNumber(authcodebtn, 60);
-      } else {
-        this.$message.error(res.error);
-      }
-    },
+    // async getAuthCode() {
+    //   let res = await getAuthCode(this.ruleForm.mobile, "apply");
+    //   if (res.code === 200) {
+    //     let authcodebtn = this.$refs.authcodebtn;
+    //     this.getNumber(authcodebtn, 60);
+    //   } else {
+    //     this.$message.error(res.error);
+    //   }
+    // },
     // 验证码倒计时
-    getNumber(obj, count) {
-      obj.innerHTML = `${count}s后获取`;
-      obj.disabled = true;
-      count--;
-      if (count > 0) {
-        this.codeTimer = setTimeout(() => {
-          this.getNumber(obj, count);
-        }, 1000);
-      } else {
-        obj.innerHTML = `发送`;
-        obj.disabled = false;
-      }
-    },
-    // 发送验证码
-    sendAuthcode() {
-      let reg = /^((400[0-9]{7})|(800[0-9]{7})|(0\d{2,3}-\d{7,8}(-\d{1,6})?$)|([1](([3][0-9])|([4][5,7,9])|([5][4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}))$/;
-      if (!reg.test(this.ruleForm.mobile)) {
-        this.$message.error("请输入正确的手机号码");
-      } else {
-        this.getAuthCode(); // 验证码接口
-      }
-    },
+    // getNumber(obj, count) {
+    //   obj.innerHTML = `${count}s后获取`;
+    //   obj.disabled = true;
+    //   count--;
+    //   if (count > 0) {
+    //     this.codeTimer = setTimeout(() => {
+    //       this.getNumber(obj, count);
+    //     }, 1000);
+    //   } else {
+    //     obj.innerHTML = `发送`;
+    //     obj.disabled = false;
+    //   }
+    // },
+    // // 发送验证码
+    // sendAuthcode() {
+    //   let reg = /^((400[0-9]{7})|(800[0-9]{7})|(0\d{2,3}-\d{7,8}(-\d{1,6})?$)|([1](([3][0-9])|([4][5,7,9])|([5][4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}))$/;
+    //   if (!reg.test(this.ruleForm.mobile)) {
+    //     this.$message.error("请输入正确的手机号码");
+    //   } else {
+    //     this.getAuthCode(); // 验证码接口
+    //   }
+    // },
     // 提交成功后
     sureCallback() {
       this.cancelCallback();

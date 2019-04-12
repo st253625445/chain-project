@@ -1,5 +1,5 @@
 <template>
-  <div class="chain-project">
+  <div class="chain-project" :class="{ poverBox: isPover }">
     <div
       class="chain-box"
       ref="chainItemBox"
@@ -21,7 +21,7 @@
           :key="index"
         >
           <span class="probeItem" @click="parBeItemClick(item)">{{
-            item.name
+            item.chainName
           }}</span>
           <transition>
             <div class="probeComeList">
@@ -29,10 +29,10 @@
                 <ul>
                   <li
                     class="probeComeItem"
-                    v-for="(_item, _index) in item.pathList"
+                    v-for="(_item, _index) in item.nodes"
                     :key="_index"
                   >
-                    {{ _item.name }}
+                    {{ _item }}
                   </li>
                 </ul>
               </div>
@@ -60,9 +60,14 @@
         "
         @click="collectionCanvas"
       ></div>
-      <div class="chainIcon popButton" @click="popCanvas"></div>
+      <div
+        class="chainIcon popButton"
+        :class="{ active: isPover }"
+        @click="popCanvas"
+      ></div>
       <div class="chainIcon saveButton" @click="saveCanvas"></div>
     </div>
+    <div class="popClose" v-if="isPover" @click="popCanvas">X</div>
     <div class="noData" v-if="!inChainLoading && isNoData">
       <span>暂无与关键词相关的产业链 <br />换个关键词试试 </span>
     </div>
@@ -89,10 +94,7 @@ export default {
       isEmpty: true,
       canvasBoxId: "",
       centerName: "",
-      parentChainId: "", // 探查的前一级Id
       chainTitle: "",
-      parentsChain: [], // 探查的上级
-      chainParbeItem: {},
       chainParbeActiveItem: null,
       parbeData: [],
       parbeDataShow: false,
@@ -100,7 +102,8 @@ export default {
       isPabeOver: false, // 探查是否上限,
       sliderNum: 0, // 缩放
       myChainItem: null, // 实例
-      collectionType: 0 // 收藏类型
+      collectionType: 0, // 收藏类型
+      isPover: false // 放大
     };
   },
   computed: {
@@ -143,7 +146,7 @@ export default {
         this.collectionType = _itemData.userFlag;
         this.inChainLoading = false;
         let chainOption = {
-          data: _itemData.industryChainBody,
+          data: _itemData.chainBody,
           id: _itemData.id,
           clickItemBack: this.returnProbeItem,
           bgColor: "#fff"
@@ -167,16 +170,20 @@ export default {
     // 返回id 探查节点
     returnProbeItem(item) {
       // 返回节点ID 请求相关公司信息
-      let itemId = item.id;
+      console.log(item);
       // 获取节点探查列表
-      this.getProbeUuid(itemId);
+      let _opt = {
+        name: item.text,
+        page: 1
+      };
+      this.getProbeUuid(_opt);
     },
     // 请求节点数据
-    async getProbeUuid(id) {
-      let parbeData = await getExplorableIcList(id);
+    async getProbeUuid(_opt) {
+      let parbeData = await getExplorableIcList(_opt);
       if (parbeData.code === 200) {
         this.parbeDataShow = true;
-        this.parbeData = parbeData.data.icList;
+        this.parbeData = parbeData.data;
         this.chainParbeActiveItem = null;
       }
     },
@@ -194,7 +201,7 @@ export default {
     // 探查节点点击
     parBeItemClick(item) {
       let _query = {
-        chainId: item.uuid
+        chainId: item.chainId
       };
       let routeData = this.$router.resolve({
         path: "/index",
@@ -203,7 +210,9 @@ export default {
       window.open(routeData.href, "_blank");
     },
     // 放大产业链
-    popCanvas() {},
+    popCanvas() {
+      this.isPover = !this.isPover;
+    },
     // 收藏产业链
     collectionCanvas() {
       let id = this.chainId;
@@ -408,10 +417,18 @@ canvas {
   .scrollbar::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
   }
+  &.poverBox {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 2000;
+  }
 }
 .chain-box {
   width: 100%;
-  height: 600px;
+  height: 100%;
   position: relative;
   overflow: hidden;
   background: #fff;
@@ -487,7 +504,8 @@ canvas {
   }
   .popButton {
     background-position: 0 -40px;
-    &:hover {
+    &:hover,
+    &.active {
       background-position: -32px -40px;
     }
   }
@@ -497,6 +515,18 @@ canvas {
       background-position: -32px -80px;
     }
   }
+}
+.popClose {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #7a7a7a;
+  cursor: pointer;
 }
 .chainPrabeErr {
   position: fixed;

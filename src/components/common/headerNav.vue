@@ -1,6 +1,6 @@
 <template>
   <div class="chainHeader">
-    <div class="logo-box" @click="$router.push('/chain/index')">
+    <div class="logo-box" @click="$router.push('/')">
       <img src="../../assets/img/logo-chain.png" alt="logo" class="logo" />
       <span class="logo-text">数知·产业链</span>
     </div>
@@ -183,6 +183,9 @@ export default {
           }
         }
         let _item = this.menuDatas[this.groupIndex].items[0];
+        if (_item.id === this.chainItemId) {
+          return false;
+        }
         this.chainItemClick(_item, 0);
       } else {
         this.chainItemClick({ name: null, id: null }, -1);
@@ -242,7 +245,8 @@ export default {
       this.chainItemId = item.id;
       let _query = {
         keyword: trim(this.thisSearchQ),
-        chainId: item.id
+        chainId: item.id,
+        nodeName: item.name
       };
       // 修改链接
       this.$router.push({ path: "/index", query: _query });

@@ -39,7 +39,7 @@ export default {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 20;
+    z-index: 1002;
   }
 }
 .drawer-bg {

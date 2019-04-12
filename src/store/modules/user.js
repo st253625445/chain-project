@@ -22,8 +22,8 @@ const user = {
             const data = response.data;
             console.log(data);
             // 无token 先记录username
-            setToken(data.id);
-            commit("SET_TOKEN", data.id);
+            setToken(data);
+            commit("SET_TOKEN", data);
             resolve();
           })
           .catch(error => {

@@ -1,30 +1,45 @@
 <template>
   <div class="cloudMapBox">
-    <div id="cloudMap"></div>
-    <div class="typeSelect">
-      <el-select v-model="typeValue" placeholder="请选择" size="mini">
-        <el-option
-          v-for="item in typeOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+    <div class="lt50">
+      <div class="cloudPageMapcunt">
+        <p class="title">产业链全国区域分布地图</p>
+        <div id="cloudMap" v-loading="cloudLoading"></div>
+        <div class="typeSelect">
+          <el-select v-model="typeValue" placeholder="请选择" size="mini">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
+      </div>
     </div>
-    <div class="industryTable">
-      <el-table
-        :data="typeValue === 1 ? tableData1 : tableData2"
-        class="industryTable"
-        border
-        style="width: 100%"
-        height="240"
-      >
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="name" label="区域名称"></el-table-column>
-        <el-table-column prop="value" label="成员数"></el-table-column>
-        <el-table-column prop="scale" label="集中度"></el-table-column>
-        <el-table-column prop="totalScale" label="累计占比"></el-table-column>
-      </el-table>
+    <div class="rt50">
+      <div class="cloudPageTablecunt">
+        <p class="title">大区分布统计</p>
+        <div class="industryTable" v-loading="cloudLoading">
+          <el-table
+            :data="typeValue === 1 ? tableData1 : tableData2"
+            style="width: 100%"
+            height="320"
+          >
+            <el-table-column
+              type="index"
+              label="序号"
+              width="50"
+            ></el-table-column>
+            <el-table-column prop="name" label="区域名称"></el-table-column>
+            <el-table-column prop="value" label="成员数"></el-table-column>
+            <el-table-column prop="scale" label="集中度"></el-table-column>
+            <el-table-column
+              prop="totalScale"
+              label="累计占比"
+            ></el-table-column>
+          </el-table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +48,7 @@
 import echarts from "echarts";
 import "echarts/map/js/china.js";
 export default {
-  props: ["data"],
+  props: ["data", "cloudLoading"],
   data() {
     return {
       myCharts: {},
@@ -137,6 +152,7 @@ export default {
     // 整理data
     splitData(data) {
       let allData = data.barGraph;
+      if (!allData) return false;
       let areaCounts = data.tableCounts;
       // type1
       this.maxValue1 = allData[0].count - 0;
@@ -220,7 +236,7 @@ export default {
             name: "产业分布",
             type: "map",
             mapType: "china",
-            zoom: 1.2,
+            zoom: 1.1,
             roam: false,
             label: {
               normal: {
@@ -270,20 +286,33 @@ export default {
 
 <style lang="less">
 .cloudMapBox {
+  display: flex;
   position: relative;
   width: 100%;
   height: 100%;
+  .lt50,
+  .rt50 {
+    width: 50%;
+  }
+  .lt50 {
+    padding-right: 10px;
+  }
+  .rt50 {
+    padding-left: 10px;
+  }
   .typeSelect {
     position: absolute;
     width: 120px;
-    left: 0;
-    top: 40px;
+    left: 20px;
+    top: 60px;
   }
   .industryTable {
-    margin-top: 20px;
+    padding: 20px;
+    padding-top: 0;
     .el-table td,
     .el-table th {
       text-align: center;
+      border-bottom: none;
     }
     .el-table th {
       background: #6475e2;
@@ -296,6 +325,6 @@ export default {
 }
 #cloudMap {
   width: 100%;
-  height: 400px;
+  height: 340px;
 }
 </style>

@@ -139,8 +139,8 @@
                 <span
                   v-for="(chainItem, chainIndex) in item.chains"
                   :key="chainIndex"
-                  @click="chainItemClick(chainItem.chainId)"
-                  >{{ chainItem.centerNode }}</span
+                  @click="chainItemClick(chainItem)"
+                  >{{ chainItem.chainName }}</span
                 >
               </div>
             </div>
@@ -166,7 +166,7 @@
                 }"
                 target="_blank"
               >
-                <span>{{ scope.row.name }}</span>
+                <span>{{ scope.row.companyName }}</span>
               </router-link>
             </template>
           </el-table-column>
@@ -306,11 +306,12 @@ export default {
     },
     // 公司名称跳转
     companyItemClick(data) {
-      let routeData = this.$router.resolve({
-        path: "/chain/company",
-        query: { companyId: data.companyId }
-      });
-      window.open(routeData.href, "_blank");
+      console.log(data);
+      // let routeData = this.$router.resolve({
+      //   path: "/chain/company",
+      //   query: { companyId: data.companyId }
+      // });
+      // window.open(routeData.href, "_blank");
     },
     // 搜索产业资讯
     getChainNews() {
@@ -351,10 +352,10 @@ export default {
         });
     },
     // 点击相关产业链
-    chainItemClick(id) {
+    chainItemClick(item) {
       let routeData = this.$router.resolve({
-        path: "/chain/list",
-        query: { chainId: id }
+        path: "/index",
+        query: { chainId: item.chainId, nodeName: item.chainName }
       });
       window.open(routeData.href, "_blank");
     },
