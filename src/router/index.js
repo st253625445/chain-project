@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { getToken } from "@/utils/auth"; // 验权
+import { getToken, setToken } from "@/utils/auth"; // 验权
 
 Vue.use(Router);
 
@@ -156,8 +156,8 @@ export const constantRouterMap = [
     path: "/pdf",
     component: () => import("@/views/pages/pdf"),
     hidden: true
-  }
-  // { path: "*", redirect: "/404", hidden: true }
+  },
+  { path: "*", redirect: "/404", hidden: true }
 ];
 
 const router = new Router({
@@ -168,7 +168,11 @@ const router = new Router({
 // 用户登录过滤器
 const whiteList = ["/login"]; // 不重定向白名单
 router.beforeEach((to, from, next) => {
-  if (getToken()) {
+  let _token = to.query.token;
+  if (_token) {
+    setToken(_token);
+    next({ path: "/" });
+  } else if (getToken()) {
     if (to.path === "/login") {
       next({ path: "/" });
     } else {

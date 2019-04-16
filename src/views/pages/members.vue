@@ -54,6 +54,139 @@
       >
       </el-pagination>
     </div>
+    <div class="membersList">
+      <p class="title">
+        产业链核心成员
+        <span class="subTitle">集成电路产业链中，核心成员54名</span>
+      </p>
+      <el-table
+        ref="multipleTable2"
+        :data="tableData"
+        stripe
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        @sort-change="sortChange"
+      >
+        <el-table-column
+          type="selection"
+          width="85"
+          label-class-name="selectLable"
+        >
+        </el-table-column>
+        <el-table-column type="index" label="序号"> </el-table-column>
+        <el-table-column prop="name" label="企业名称"></el-table-column>
+        <el-table-column prop="hy" label="产业链板块"> </el-table-column>
+        <el-table-column prop="data1" label="主要产品"> </el-table-column>
+        <el-table-column label="所在集团">
+          <template slot-scope="scope" @click="click1Fn(scope.row)"
+            >详情</template
+          >
+        </el-table-column>
+        <el-table-column label="企业关联方">
+          <template slot-scope="scope" @click="click1Fn(scope.row)"
+            >详情</template
+          >
+        </el-table-column>
+        <el-table-column prop="data1" label="注册省市" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="企业规模" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="生存年限" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="企业类型" sortable>
+        </el-table-column>
+        <el-table-column
+          prop="data1"
+          label="注册资金币种"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          prop="data1"
+          label="注册资金"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          prop="data1"
+          label="成立时间"
+          sortable
+        ></el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[5, 10, 20]"
+        :page-size="100"
+        layout="prev, pager, next, sizes, jumper"
+        :total="400"
+      >
+      </el-pagination>
+    </div>
+    <div class="membersList">
+      <p class="title">
+        产业链普通成员
+        <span class="subTitle">集成电路产业链中，普通成员54名</span>
+      </p>
+      <el-table
+        ref="multipleTable2"
+        :data="tableData"
+        stripe
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        @sort-change="sortChange"
+      >
+        <el-table-column
+          type="selection"
+          width="85"
+          label-class-name="selectLable"
+        >
+        </el-table-column>
+        <el-table-column type="index" label="序号"> </el-table-column>
+        <el-table-column prop="name" label="企业名称"></el-table-column>
+        <el-table-column prop="hy" label="产业链板块"> </el-table-column>
+        <el-table-column prop="data1" label="主要产品"> </el-table-column>
+        <el-table-column label="所在集团">
+          <template slot-scope="scope" @click="click1Fn(scope.row)"
+            >详情</template
+          >
+        </el-table-column>
+        <el-table-column label="企业关联方">
+          <template slot-scope="scope" @click="click1Fn(scope.row)"
+            >详情</template
+          >
+        </el-table-column>
+        <el-table-column prop="data1" label="注册省市" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="企业规模" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="生存年限" sortable>
+        </el-table-column>
+        <el-table-column prop="data1" label="企业类型" sortable>
+        </el-table-column>
+        <el-table-column
+          prop="data1"
+          label="注册资金币种"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          prop="data1"
+          label="注册资金"
+          sortable
+        ></el-table-column>
+        <el-table-column prop="data1" label="成立时间" sortable>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[5, 10, 20]"
+        :page-size="100"
+        layout="prev, pager, next, sizes, jumper"
+        :total="400"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
