@@ -37,6 +37,7 @@ export default {
   }
   > .header {
     position: fixed;
+    min-width: 1440px;
     width: 100%;
     top: 0;
     z-index: 1002;

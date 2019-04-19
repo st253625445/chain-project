@@ -120,6 +120,7 @@ export default {
         let id = this.$route.query.chainId;
         if (id) {
           this.isNoData = false;
+          this.parbeDataShow = false;
           this.randerChain(id);
         }
       },
@@ -200,8 +201,10 @@ export default {
     },
     // 探查节点点击
     parBeItemClick(item) {
+      console.log(item);
       let _query = {
-        chainId: item.chainId
+        chainId: item.chainId,
+        nodeName: item.chainName
       };
       let routeData = this.$router.resolve({
         path: "/index",

@@ -161,7 +161,7 @@
             <template slot-scope="scope">
               <router-link
                 :to="{
-                  path: '/chain/company',
+                  path: '/company',
                   query: { companyId: scope.row.companyId }
                 }"
                 target="_blank"
@@ -293,7 +293,7 @@ export default {
             if (res.code === 200) {
               let _datas = res.data;
               for (let i = 0; i < _datas.length; i++) {
-                _datas[i]["value"] = _datas[i].companyName;
+                _datas[i]["value"] = _datas[i].name;
               }
               cb(_datas);
               this.companyitems = _datas;
@@ -307,11 +307,11 @@ export default {
     // 公司名称跳转
     companyItemClick(data) {
       console.log(data);
-      // let routeData = this.$router.resolve({
-      //   path: "/chain/company",
-      //   query: { companyId: data.companyId }
-      // });
-      // window.open(routeData.href, "_blank");
+      let routeData = this.$router.resolve({
+        path: "/company",
+        query: { companyId: data.companyId }
+      });
+      window.open(routeData.href, "_blank");
     },
     // 搜索产业资讯
     getChainNews() {

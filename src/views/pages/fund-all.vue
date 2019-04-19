@@ -1,5 +1,5 @@
 <template>
-  <div class="parkPage">
+  <div class="fundAllPage">
     <div class="seach-header">
       <span
         class="dropdown-link"
@@ -27,14 +27,14 @@
         </transition>
       </span>
       <el-input
-        placeholder="产业园名称关键字"
-        v-model="parkNameQ"
-        class="parkNameSearch"
+        placeholder="协会名称关键字"
+        v-model="fundAllNameQ"
+        class="fundAllNameSearch"
       >
         <el-button slot="append">搜索</el-button>
       </el-input>
     </div>
-    <div class="parkTagsBox">
+    <div class="fundAllTagsBox">
       <div class="tagsUl">
         <ul>
           <li class="active"><span>全部</span></li>
@@ -51,67 +51,72 @@
             <span>{{ item }}</span>
           </li>
         </ul>
-        <p class="title">热门产业</p>
+        <p class="title">产业</p>
       </div>
     </div>
-    <div class="parkList">
+    <div class="itemBox fundAllList">
       <p class="title">
         <span class="subTitle"
-          >北京区域共计5个产业园，涉及30个产业链，79家明星企业</span
+          >北京区域共计5支产业基金，投资实体
+          <span class="blueSpan">10000</span> 家</span
         >
       </p>
-      <el-table
-        :data="tableData"
-        stripe
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        @sort-change="sortChange"
-      >
-        <el-table-column
-          type="selection"
-          width="85"
-          label-class-name="selectLable"
+      <div class="tableBox">
+        <el-table
+          :data="tableData"
+          stripe
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          @sort-change="sortChange"
         >
-        </el-table-column>
-        <el-table-column label="产业园名称">
-          <template slot-scope="scope">
-            <span @click="openInfoBox(scope.row)" class="pointerHover">{{
-              scope.row.data1
-            }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="data2" label="地区"> </el-table-column>
-        <el-table-column prop="data3" label="成立时间"> </el-table-column>
-        <el-table-column prop="data3" label="产业集群"> </el-table-column>
-        <el-table-column prop="data3" label="电话"> </el-table-column>
-        <el-table-column prop="data3" label="注册企业"> </el-table-column>
-        <el-table-column label="产业园名企">
-          <template slot-scope="scope">
-            <span @click="linkParkChain(scope.row)" class="pointerHover"
-              >查看</span
-            >
-          </template>
-        </el-table-column>
-        <el-table-column prop="data3" label="园区资讯">
-          <template slot-scope="scope">
-            <span @click="linkParkNews(scope.row)" class="pointerHover"
-              >查看</span
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :page-sizes="[5, 10, 20]"
-        :page-size="100"
-        layout="prev, pager, next, sizes, jumper"
-        :total="400"
-      >
-      </el-pagination>
+          <el-table-column
+            type="selection"
+            width="85"
+            label-class-name="selectLable"
+          >
+          </el-table-column>
+          <el-table-column type="index" label="序号"> </el-table-column>
+          <el-table-column label="产业基金名称">
+            <template slot-scope="scope">
+              <span @click="openInfoBox(scope.row)" class="pointerHover">{{
+                scope.row.data1
+              }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="data2" label="注册资本（万元）">
+          </el-table-column>
+          <el-table-column prop="data3" label="币种"> </el-table-column>
+          <el-table-column prop="data3" label="成立时间"> </el-table-column>
+          <el-table-column prop="data3" label="投资实体总数"> </el-table-column>
+          <el-table-column prop="data3" label="直接投资实体企业数">
+          </el-table-column>
+          <el-table-column prop="data3" label="间接投资实体企业">
+          </el-table-column>
+          <el-table-column label="投资谱系">
+            <template slot-scope="scope">
+              <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
+                >详情</span
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[5, 10, 20]"
+          :page-size="100"
+          layout="prev, pager, next, sizes, jumper"
+          :total="400"
+        >
+        </el-pagination>
+      </div>
     </div>
-    <div class="parkInfoBox" v-if="infoBoxShow" v-clickoutside="closeInfoBox">
+    <div
+      class="fundAllInfoBox"
+      v-if="infoBoxShow"
+      v-clickoutside="closeInfoBox"
+    >
       <div class="title">张江高科技园区</div>
       <div class="infoCount">
         <div>
@@ -138,7 +143,7 @@ export default {
       locationVal: "全国",
       dropdownShow: false,
       infoBoxShow: false,
-      parkNameQ: "",
+      fundAllNameQ: "",
       locationList: [
         "东城区",
         "西城区",
@@ -269,38 +274,16 @@ export default {
     closeInfoBox() {
       this.infoBoxShow = false;
     },
-    // 链接产业集群
-    linkParkChain(data) {
+    // 链接投资谱系
+    clickFn(data) {
       console.log(data);
-      let _query = {
-        chainId: this.$route.query.chainId,
-        nodeName: this.$route.query.nodeName
-      };
-      let routeData = this.$router.resolve({
-        path: "/parkChain",
-        query: _query
-      });
-      window.open(routeData.href, "_blank");
-    },
-    // 链接园区资讯
-    linkParkNews(data) {
-      console.log(data);
-      let _query = {
-        chainId: this.$route.query.chainId,
-        nodeName: this.$route.query.nodeName
-      };
-      let routeData = this.$router.resolve({
-        path: "/parkNews",
-        query: _query
-      });
-      window.open(routeData.href, "_blank");
     }
   }
 };
 </script>
 
 <style lang="less">
-.parkPage {
+.fundAllPage {
   position: relative;
   width: 100%;
   padding: 20px;
@@ -365,7 +348,7 @@ export default {
         color: #000;
       }
     }
-    .parkNameSearch {
+    .fundAllNameSearch {
       width: 300px;
       height: 24px;
       margin-bottom: 10px;
@@ -381,7 +364,7 @@ export default {
       color: #fff;
     }
   }
-  .parkTagsBox {
+  .fundAllTagsBox {
     width: 100%;
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -429,23 +412,10 @@ export default {
       }
     }
   }
-  .parkList {
-    width: 100%;
-    padding: 0 20px;
-    background: #fff;
-    border: 1px solid #eeeeee;
-    margin-bottom: 20px;
-    .title {
-      font-size: 16px;
-      line-height: 60px;
-      color: #4b61e7;
-      .subTitle {
-        display: inline-block;
-        text-indent: 20px;
-        font-size: 12px;
-        color: rgb(170, 170, 170);
-        line-height: 1.2;
-      }
+  .fundAllList {
+    .tableBox {
+      width: 100%;
+      padding: 0 20px 20px;
     }
     .el-table .cell {
       text-align: center;
@@ -473,7 +443,7 @@ export default {
       color: #4b61e7;
     }
   }
-  .parkInfoBox {
+  .fundAllInfoBox {
     position: absolute;
     width: 600px;
     height: 400px;

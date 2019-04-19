@@ -128,7 +128,7 @@
         <span class="subTitle">集成电路产业链中，普通成员54名</span>
       </p>
       <el-table
-        ref="multipleTable2"
+        ref="multipleTable"
         :data="tableData"
         stripe
         tooltip-effect="dark"

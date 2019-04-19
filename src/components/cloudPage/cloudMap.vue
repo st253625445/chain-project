@@ -1,7 +1,7 @@
 <template>
   <div class="cloudMapBox">
     <div class="lt50">
-      <div class="cloudPageMapcunt">
+      <div class="itemBox cloudPageMapcunt">
         <p class="title">产业链全国区域分布地图</p>
         <div id="cloudMap" v-loading="cloudLoading"></div>
         <div class="typeSelect">
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="rt50">
-      <div class="cloudPageTablecunt">
+      <div class="itemBox cloudPageTablecunt">
         <p class="title">大区分布统计</p>
         <div class="industryTable" v-loading="cloudLoading">
           <el-table

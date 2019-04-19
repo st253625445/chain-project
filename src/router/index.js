@@ -9,14 +9,12 @@ import Layout from "../views/layout/Layout";
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
-* alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
-*                                if not set alwaysShow, only more than one route under the children
-*                                it will becomes nested mode, otherwise not show the root menu
 * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
 * name:'router-name'             the name is used by <keep-alive> (must set!!!)
 * meta : {
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
+    activePath: ''
   }
 **/
 export const constantRouterMap = [
@@ -33,124 +31,102 @@ export const constantRouterMap = [
     hidden: true
   },
   {
-    path: "/index",
+    path: "",
     component: Layout,
     children: [
       {
-        path: "",
+        path: "index",
         name: "index",
-        meta: { title: "产业谱系" },
+        meta: { title: "产业谱系", activePath: "index" },
         component: () => import("@/views/pages/index")
-      }
-    ]
-  },
-  {
-    path: "/members",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "members",
         name: "members",
-        meta: { title: "产业链成员" },
+        meta: { title: "产业链成员", activePath: "members" },
         component: () => import("@/views/pages/members")
-      }
-    ]
-  },
-  {
-    path: "/portrait",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "portrait",
         name: "portrait",
-        meta: { title: "行业画像" },
+        meta: { title: "行业画像", activePath: "portrait" },
         component: () => import("@/views/pages/portrait")
-      }
-    ]
-  },
-  {
-    path: "/cloud",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "cloud",
         name: "cloud",
-        meta: { title: "产业云图" },
+        meta: { title: "产业云图", activePath: "cloud" },
         component: () => import("@/views/pages/cloud")
-      }
-    ]
-  },
-  {
-    path: "/scale",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "scale",
         name: "scale",
-        meta: { title: "产业规模" },
+        meta: { title: "产业规模", activePath: "scale" },
         component: () => import("@/views/pages/scale")
-      }
-    ]
-  },
-  {
-    path: "/fund",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "fund",
         name: "fund",
-        meta: { title: "产业基金" },
+        meta: { title: "产业基金（匹配）", activePath: "fund" },
         component: () => import("@/views/pages/fund")
-      }
-    ]
-  },
-  {
-    path: "/financing",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "fundAll",
+        name: "fundAll",
+        meta: { title: "产业基金（全量）", activePath: "fundAll" },
+        component: () => import("@/views/pages/fund-all")
+      },
+      {
+        path: "financing",
         name: "financing",
-        meta: { title: "并购融资事件" },
+        meta: { title: "并购融资事件", activePath: "financing" },
         component: () => import("@/views/pages/financing")
-      }
-    ]
-  },
-  {
-    path: "/information",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "information",
         name: "information",
-        meta: { title: "资讯与行研" },
+        meta: { title: "资讯与行研", activePath: "information" },
         component: () => import("@/views/pages/information")
-      }
-    ]
-  },
-  {
-    path: "/park",
-    component: Layout,
-    children: [
+      },
       {
-        path: "",
+        path: "park",
         name: "park",
-        meta: { title: "产业园区" },
+        meta: { title: "产业园区", activePath: "park" },
         component: () => import("@/views/pages/park")
+      },
+      {
+        path: "parkChain",
+        name: "parkChain",
+        hidden: true,
+        meta: { title: "产业集群", activePath: "park" },
+        component: () => import("@/views/pages/park-chain")
+      },
+      {
+        path: "parkNews",
+        name: "parkNews",
+        hidden: true,
+        meta: { title: "园区资讯", activePath: "park" },
+        component: () => import("@/views/pages/park-news")
+      },
+      {
+        path: "associations",
+        name: "associations",
+        meta: { title: "协会联盟", activePath: "associations" },
+        component: () => import("@/views/pages/associations")
+      },
+      {
+        path: "associationsChain",
+        name: "associationsChain",
+        hidden: true,
+        meta: { title: "协会成员", activePath: "associations" },
+        component: () => import("@/views/pages/associations-chain")
       }
     ]
   },
   {
-    path: "/associations",
-    component: Layout,
-    children: [
-      {
-        path: "",
-        name: "associations",
-        meta: { title: "协会联盟" },
-        component: () => import("@/views/pages/associations")
-      }
-    ]
+    path: "/company",
+    redirect: "/404",
+    hidden: true
   },
   {
     path: "/pdf",
