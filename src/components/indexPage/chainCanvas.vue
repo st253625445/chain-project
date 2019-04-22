@@ -120,7 +120,12 @@ export default {
         let id = this.$route.query.chainId;
         if (id) {
           this.isNoData = false;
+          this.parbeDataShow = false;
           this.randerChain(id);
+        } else {
+          this.parbeDataShow = false;
+          this.inChainLoading = false;
+          this.isNoData = true;
         }
       },
       immediate: true
@@ -141,6 +146,11 @@ export default {
         let _itemData = (this.chainData = await this.searchChainItem(
           this.chainId
         ));
+        if (!_itemData) {
+          this.inChainLoading = false;
+          this.isNoData = true;
+          return false;
+        }
         // 判断是否为初次渲染
         this.chainTitle = this.centerName = _itemData.name;
         this.collectionType = _itemData.userFlag;
@@ -200,8 +210,10 @@ export default {
     },
     // 探查节点点击
     parBeItemClick(item) {
+      console.log(item);
       let _query = {
-        chainId: item.chainId
+        chainId: item.chainId,
+        nodeName: item.chainName
       };
       let routeData = this.$router.resolve({
         path: "/index",
