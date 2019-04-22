@@ -95,7 +95,9 @@
           </el-table-column>
           <el-table-column label="投资谱系">
             <template slot-scope="scope">
-              <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
+              <span
+                @click="linkFundChain(scope.row)"
+                class="blueSpan pointerHover"
                 >详情</span
               >
             </template>
@@ -275,8 +277,17 @@ export default {
       this.infoBoxShow = false;
     },
     // 链接投资谱系
-    clickFn(data) {
+    linkFundChain(data) {
       console.log(data);
+      let _query = {
+        chainId: this.$route.query.chainId,
+        nodeName: this.$route.query.nodeName
+      };
+      let routeData = this.$router.resolve({
+        path: "/fundChain",
+        query: _query
+      });
+      window.open(routeData.href, "_blank");
     }
   }
 };

@@ -122,6 +122,10 @@ export default {
           this.isNoData = false;
           this.parbeDataShow = false;
           this.randerChain(id);
+        } else {
+          this.parbeDataShow = false;
+          this.inChainLoading = false;
+          this.isNoData = true;
         }
       },
       immediate: true
@@ -142,6 +146,11 @@ export default {
         let _itemData = (this.chainData = await this.searchChainItem(
           this.chainId
         ));
+        if (!_itemData) {
+          this.inChainLoading = false;
+          this.isNoData = true;
+          return false;
+        }
         // 判断是否为初次渲染
         this.chainTitle = this.centerName = _itemData.name;
         this.collectionType = _itemData.userFlag;

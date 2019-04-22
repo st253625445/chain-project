@@ -42,9 +42,11 @@
           <el-table-column type="index" label="序号"> </el-table-column>
           <el-table-column label="产业基金名称">
             <template slot-scope="scope">
-              <span @click="clickFn(scope.row)" class="pointerHover">{{
-                scope.row.data1
-              }}</span>
+              <span
+                @click="openInfoBox(scope.row)"
+                class="blueSpan pointerHover"
+                >{{ scope.row.data1 }}</span
+              >
             </template>
           </el-table-column>
           <el-table-column prop="data2" label="注册资本（万元）">
@@ -57,7 +59,9 @@
           <el-table-column prop="data3" label="成立时间"> </el-table-column>
           <el-table-column label="投资谱系">
             <template slot-scope="scope">
-              <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
+              <span
+                @click="linkFundChain(scope.row)"
+                class="blueSpan pointerHover"
                 >详情</span
               >
             </template>
@@ -160,8 +164,17 @@ export default {
       this.infoBoxShow = false;
     },
     // 链接投资谱系
-    clickFn(data) {
+    linkFundChain(data) {
       console.log(data);
+      let _query = {
+        chainId: this.$route.query.chainId,
+        nodeName: this.$route.query.nodeName
+      };
+      let routeData = this.$router.resolve({
+        path: "/fundChain",
+        query: _query
+      });
+      window.open(routeData.href, "_blank");
     }
   }
 };

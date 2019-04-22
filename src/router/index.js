@@ -77,6 +77,13 @@ export const constantRouterMap = [
         component: () => import("@/views/pages/fund-all")
       },
       {
+        path: "fundChain",
+        name: "fundChain",
+        hidden: true,
+        meta: { title: "投资谱系", activePath: "fund" },
+        component: () => import("@/views/pages/fund-chain")
+      },
+      {
         path: "financing",
         name: "financing",
         meta: { title: "并购融资事件", activePath: "financing" },
