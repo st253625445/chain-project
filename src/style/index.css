@@ -1,0 +1,227 @@
+@import 'base.css';
+/*fade*/
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.28s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+/*fade*/
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all .5s;
+}
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.breadcrumb-move {
+  transition: all .5s;
+}
+.breadcrumb-leave-active {
+  position: absolute;
+}
+.el-upload input[type="file"] {
+  display: none !important;
+}
+.el-upload__input {
+  display: none;
+}
+.el-dialog {
+  transform: none;
+  left: 0;
+  position: relative;
+  margin: 0 auto;
+}
+.upload-container .el-upload {
+  width: 100%;
+}
+.upload-container .el-upload .el-upload-dragger {
+  width: 100%;
+  height: 200px;
+}
+#app .main-container {
+  min-height: 100%;
+  padding-top: 60px;
+  transition: margin-left 0.28s;
+  margin-left: 200px;
+  position: relative;
+}
+#app .sidebar-container {
+  transition: width 0.28s;
+  width: 200px !important;
+  height: calc(40%);
+  position: fixed;
+  font-size: 0px;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  z-index: 1001;
+  overflow: hidden;
+  background: #2a2831;
+  color: #ffffff;
+}
+#app .sidebar-container .chainName {
+  width: 100%;
+  padding: 0 20px;
+  height: 50px;
+  font-size: 19px;
+  line-height: 50px;
+  color: #ffffff;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#app .sidebar-container .el-scrollbar {
+  height: calc(50%);
+}
+#app .sidebar-container .horizontal-collapse-transition {
+  transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+}
+#app .sidebar-container .scrollbar-wrapper {
+  height: calc(115%);
+}
+#app .sidebar-container .scrollbar-wrapper .el-scrollbar__view {
+  height: 100%;
+}
+#app .sidebar-container .is-horizontal {
+  display: none;
+}
+#app .sidebar-container a {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+}
+#app .sidebar-container .svg-icon {
+  margin-right: 16px;
+}
+#app .sidebar-container .el-menu {
+  border: none;
+  height: 100%;
+  width: 100% !important;
+  background: transparent;
+}
+#app .sidebar-container .menu-wrapper {
+  width: 100%;
+  height: 50px;
+}
+#app .sidebar-container .el-menu-item {
+  color: #fff;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 40px !important;
+  padding-right: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#app .sidebar-container .el-menu-item:hover,
+#app .sidebar-container .el-menu-item.is-active {
+  background: #4b61e7;
+}
+#app .withoutAnimation .main-container,
+#app .withoutAnimation .sidebar-container {
+  transition: none;
+}
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+label {
+  font-weight: 700;
+}
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+#app {
+  height: 100%;
+  cursor: default;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: #409EFF;
+  outline: none;
+  text-decoration: none;
+}
+ul,
+li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+div:focus {
+  outline: none;
+}
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.fl {
+  float: left;
+}
+.app-main {
+  min-height: 100%;
+}
+.app-container {
+  padding: 20px;
+  height: calc(50vh);
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+.icon-button {
+  border: none;
+}
+.el-pagination {
+  margin-top: 20PX;
+}
+.el-table::before {
+  height: 0;
+}
+.el-table .cell {
+  white-space: nowrap;
+}
+.pointerHover {
+  cursor: pointer;
+}
+.itemBox {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  margin-bottom: 20px;
+}
+.itemBox > .title {
+  text-indent: 20px;
+  font-size: 16px;
+  line-height: 60px;
+  color: #1027ad;
+}
+.itemBox > .title .subTitle {
+  display: inline-block;
+  text-indent: 20px;
+  font-size: 12px;
+  color: #aaaaaa;
+  line-height: 1.2;
+}
+.itemBox .blueSpan {
+  color: #1027ad;
+}

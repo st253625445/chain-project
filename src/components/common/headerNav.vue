@@ -126,7 +126,7 @@ export default {
       navDrdownHideTime: null
     };
   },
-  mounted() {
+  created() {
     let _query = this.$route.query;
     if (_query.keyword) {
       this.thisSearchQ = _query.keyword;
@@ -134,6 +134,8 @@ export default {
     } else if (_query.chainId) {
       this.chainItemId = _query.chainId;
     }
+  },
+  mounted() {
     // style-icon 点击样式*/
     let icon = document.getElementsByClassName("iconAction");
     for (let i = 0; i < icon.length; i++) {

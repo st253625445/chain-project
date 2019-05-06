@@ -33,17 +33,22 @@
       <div class="tipsBox">滑动鼠标，查看更多</div>
     </div>
     <div class="listBox">
-      <div class="newsItem" v-for="(item, index) in newsList" :key="index">
-        <div>
-          <img src="../../assets/img/noImg.png" alt="" />
-          <p class="title">
-            <a @click="getIndustryResearchFile(item.file)" v-if="typeTab === 1">
-              {{ item.title }}</a
-            >
-            <a :href="item.url" target="_blank" v-else> {{ item.title }}</a>
-          </p>
-          <span class="source">{{ item.source }}</span>
-          <span class="time">{{ item.publishTime | timeFilter }}</span>
+      <div>
+        <div class="newsItem" v-for="(item, index) in newsList" :key="index">
+          <div>
+            <img src="../../assets/img/noImg.png" alt="" />
+            <p class="title">
+              <a
+                @click="getIndustryResearchFile(item.file)"
+                v-if="typeTab === 1"
+              >
+                {{ item.title }}
+              </a>
+              <a :href="item.url" target="_blank" v-else> {{ item.title }}</a>
+            </p>
+            <span class="source">{{ item.source }}</span>
+            <span class="time">{{ item.publishTime | timeFilter }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -72,10 +77,12 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     let query = this.$route.query;
     if (query.chainId) {
       this.getNodeList(query.chainId);
+    } else {
+      this.$router.push("/");
     }
   },
   methods: {
@@ -207,12 +214,14 @@ export default {
     }
   }
   .listBox {
-    display: flex;
-    flex-wrap: wrap;
     min-height: calc(100vh - 240px);
     background: #fff;
     border: 1px solid #eeeeee;
     margin-top: 20px;
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+    }
     .newsItem {
       width: 50%;
       height: 130px;

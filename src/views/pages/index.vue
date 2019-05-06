@@ -5,8 +5,9 @@
         v-for="(item, index) in chainTotalDatas"
         :key="index"
         class="chainTotalItem"
-        >{{ item.name }} {{ item.data }}</span
       >
+        {{ item.name }} {{ item.data }}
+      </span>
     </div>
     <div class="chainBox">
       <chain-pane />
@@ -29,15 +30,26 @@
         >
         </el-table-column>
         <el-table-column label="产业链板块">
-          <template slot-scope="scope">{{ scope.row.name }}</template>
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="hy" label="行业"> </el-table-column>
-        <el-table-column prop="data1" label="龙头企业" sortable>
-        </el-table-column>
-        <el-table-column prop="data2" label="核心企业" sortable>
-        </el-table-column>
-        <el-table-column prop="data3" label="普通企业" sortable>
-        </el-table-column>
+        <el-table-column prop="hy" label="行业"></el-table-column>
+        <el-table-column
+          prop="data1"
+          label="龙头企业"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          prop="data2"
+          label="核心企业"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          prop="data3"
+          label="普通企业"
+          sortable
+        ></el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -132,6 +144,14 @@ export default {
     };
   },
   components: { chainPane },
+  created() {
+    let query = this.$route.query;
+    if (query.chainId || query.keyword) {
+      console.log(query.chainId);
+    } else {
+      this.$router.push("/");
+    }
+  },
   mounted() {
     chainCategories().then(res => {
       console.log(res);

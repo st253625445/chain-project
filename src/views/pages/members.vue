@@ -1,6 +1,6 @@
 <template>
   <div class="membersPage">
-    <div class="membersList">
+    <div class="itemBox membersList">
       <p class="title">
         产业链龙头成员
         <span class="subTitle">集成电路产业链中，龙头成员54名</span>
@@ -21,18 +21,24 @@
         >
         </el-table-column>
         <el-table-column type="index" label="序号"> </el-table-column>
-        <el-table-column prop="name" label="企业名称"></el-table-column>
+        <el-table-column label="企业名称">
+          <template slot-scope="scope">
+            <span @click="linkToCompanyInfo(scope.row)" class="blueSpan">{{
+              scope.row.name
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="hy" label="产业链板块"> </el-table-column>
         <el-table-column prop="data1" label="主要产品"> </el-table-column>
         <el-table-column label="所在集团">
-          <template slot-scope="scope" @click="click1Fn(scope.row)"
-            >详情</template
-          >
+          <template slot-scope="scope" @click="click1Fn(scope.row)">
+            详情
+          </template>
         </el-table-column>
         <el-table-column label="企业关联方">
-          <template slot-scope="scope" @click="click1Fn(scope.row)"
-            >详情</template
-          >
+          <template slot-scope="scope" @click="click1Fn(scope.row)">
+            详情
+          </template>
         </el-table-column>
         <el-table-column prop="data1" label="最新股价(元)" sortable>
         </el-table-column>
@@ -54,7 +60,7 @@
       >
       </el-pagination>
     </div>
-    <div class="membersList">
+    <div class="itemBox membersList">
       <p class="title">
         产业链核心成员
         <span class="subTitle">集成电路产业链中，核心成员54名</span>
@@ -75,18 +81,24 @@
         >
         </el-table-column>
         <el-table-column type="index" label="序号"> </el-table-column>
-        <el-table-column prop="name" label="企业名称"></el-table-column>
+        <el-table-column label="企业名称">
+          <template slot-scope="scope">
+            <span @click="linkToCompanyInfo(scope.row)" class="blueSpan">{{
+              scope.row.name
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="hy" label="产业链板块"> </el-table-column>
         <el-table-column prop="data1" label="主要产品"> </el-table-column>
         <el-table-column label="所在集团">
-          <template slot-scope="scope" @click="click1Fn(scope.row)"
-            >详情</template
-          >
+          <template slot-scope="scope" @click="click1Fn(scope.row)">
+            详情
+          </template>
         </el-table-column>
         <el-table-column label="企业关联方">
-          <template slot-scope="scope" @click="click1Fn(scope.row)"
-            >详情</template
-          >
+          <template slot-scope="scope" @click="click1Fn(scope.row)">
+            详情
+          </template>
         </el-table-column>
         <el-table-column prop="data1" label="注册省市" sortable>
         </el-table-column>
@@ -122,13 +134,13 @@
       >
       </el-pagination>
     </div>
-    <div class="membersList">
+    <div class="itemBox membersList">
       <p class="title">
         产业链普通成员
         <span class="subTitle">集成电路产业链中，普通成员54名</span>
       </p>
       <el-table
-        ref="multipleTable2"
+        ref="multipleTable"
         :data="tableData"
         stripe
         tooltip-effect="dark"
@@ -143,18 +155,24 @@
         >
         </el-table-column>
         <el-table-column type="index" label="序号"> </el-table-column>
-        <el-table-column prop="name" label="企业名称"></el-table-column>
+        <el-table-column label="企业名称">
+          <template slot-scope="scope">
+            <span @click="linkToCompanyInfo(scope.row)" class="blueSpan">{{
+              scope.row.name
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="hy" label="产业链板块"> </el-table-column>
         <el-table-column prop="data1" label="主要产品"> </el-table-column>
         <el-table-column label="所在集团">
-          <template slot-scope="scope" @click="click1Fn(scope.row)"
-            >详情</template
-          >
+          <template slot-scope="scope" @click="click1Fn(scope.row)">
+            详情
+          </template>
         </el-table-column>
         <el-table-column label="企业关联方">
-          <template slot-scope="scope" @click="click1Fn(scope.row)"
-            >详情</template
-          >
+          <template slot-scope="scope" @click="click1Fn(scope.row)">
+            详情
+          </template>
         </el-table-column>
         <el-table-column prop="data1" label="注册省市" sortable>
         </el-table-column>
@@ -276,6 +294,18 @@ export default {
     // 页码跳转
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    linkToCompanyInfo(data) {
+      console.log(data);
+      let _query = {
+        chainId: this.$route.query.chainId,
+        nodeName: this.$route.query.nodeName
+      };
+      let routeData = this.$router.resolve({
+        path: "/company",
+        query: _query
+      });
+      window.open(routeData.href, "_blank");
     }
   }
 };
@@ -289,6 +319,7 @@ export default {
     font-size: 16px;
     line-height: 60px;
     color: #1027ad;
+    text-indent: 0;
     .subTitle {
       display: inline-block;
       text-indent: 20px;
@@ -324,6 +355,9 @@ export default {
     .el-pagination {
       text-align: center;
       padding-bottom: 20px;
+    }
+    .blueSpan {
+      cursor: pointer;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="cloudPage">
-    <el-row class="cloudPageBarcunt">
+    <el-row class="itemBox cloudPageBarcunt">
       <p class="title">产业链全国区域分布帕累托图</p>
       <cloudBar
         :data.sync="cloudBarData"
@@ -26,10 +26,12 @@ export default {
     cloudBar,
     cloudMap
   },
-  mounted() {
+  created() {
     let _name = this.$route.query.nodeName;
     if (_name) {
       this.getIndustryDistribution(_name);
+    } else {
+      this.$router.push("/");
     }
   },
   methods: {
@@ -53,19 +55,5 @@ export default {
 .cloudPage {
   width: 100%;
   padding: 20px;
-  .cloudPageBarcunt,
-  .cloudPageMapcunt,
-  .cloudPageTablecunt {
-    width: 100%;
-    background: #fff;
-    border: 1px solid #eeeeee;
-    margin-bottom: 20px;
-  }
-  .title {
-    text-indent: 20px;
-    font-size: 16px;
-    line-height: 60px;
-    color: #1027ad;
-  }
 }
 </style>

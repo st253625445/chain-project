@@ -52,14 +52,14 @@
         :format-tooltip="formatSliderTooltip"
         @change="sliderChange"
       ></el-slider>
-      <div
+      <!-- <div
         :class="
           collectionType === 1
             ? 'chainIcon collectionButton active'
             : 'chainIcon collectionButton '
         "
         @click="collectionCanvas"
-      ></div>
+      ></div> -->
       <div
         class="chainIcon popButton"
         :class="{ active: isPover }"
@@ -69,7 +69,7 @@
     </div>
     <div class="popClose" v-if="isPover" @click="popCanvas">X</div>
     <div class="noData" v-if="!inChainLoading && isNoData">
-      <span>暂无与关键词相关的产业链 <br />换个关键词试试 </span>
+      <span>暂无该园区产业集群</span>
     </div>
   </div>
 </template>
@@ -77,10 +77,10 @@
 // import ClipboardJS from 'clipboard'
 import { ChainChart } from "@/utils/chain";
 import {
-  chainItemSearch,
   getExplorableIcList,
   getNodeCollectionsAdd,
-  getNodeCollectionsDelete
+  getNodeCollectionsDelete,
+  getParkChainList
 } from "@/api/getData";
 export default {
   data() {
@@ -117,16 +117,13 @@ export default {
   watch: {
     $route: {
       handler() {
-        let id = this.$route.query.chainId;
-        let keyWord = this.$route.query.keyword;
-        if (keyWord && !id) {
+        console.log(this.$route);
+        let id = this.$route.query.parkId;
+        let _name = this.$route.query.parkName;
+        if (id) {
           this.isNoData = false;
           this.parbeDataShow = false;
-          this.inChainLoading = true;
-        } else if (id) {
-          this.isNoData = false;
-          this.parbeDataShow = false;
-          this.randerChain(id);
+          this.randerChain(id, _name);
         } else {
           this.parbeDataShow = false;
           this.inChainLoading = false;
@@ -138,14 +135,14 @@ export default {
   },
   mounted() {},
   methods: {
-    async randerChain(data) {
+    async randerChain(id, name) {
       this.inChainLoading = true;
-      if (!data) {
+      if (!id) {
         this.inChainLoading = false;
         this.isNoData = true;
         return false;
       }
-      this.chainId = data;
+      this.chainId = id;
       this.sliderNum = 0;
       this.$nextTick(async () => {
         let _itemData = (this.chainData = await this.searchChainItem(
@@ -157,15 +154,43 @@ export default {
           return false;
         }
         // 判断是否为初次渲染
-        this.chainTitle = this.centerName = _itemData.name;
-        this.collectionType = _itemData.userFlag;
+        this.chainTitle = this.centerName = name;
+        this.collectionType = _itemData.userFlag || 0;
         this.inChainLoading = false;
+        let _nodeList = () => {
+          return _itemData.map(item => {
+            return {
+              explorable: 0,
+              name: item,
+              nextNodeList: [],
+              nodeId: "",
+              region: "down",
+              type: "downstream",
+              typeDesc: "产业集群"
+            };
+          });
+        };
         let chainOption = {
-          data: _itemData.chainBody,
-          id: _itemData.id,
+          data: {
+            downRegion: {
+              name: "产业集群",
+              nodeList: _nodeList()
+            },
+            leftRegion: { name: "", nodeList: [] },
+            name: name,
+            nodeId: id,
+            region: "center",
+            rightRegion: { name: "", nodeList: [] },
+            type: "center",
+            typeDesc: "中心节点",
+            upRegion: { name: "", nodeList: [] }
+          },
+          id: this.chainId,
           clickItemBack: this.returnProbeItem,
           bgColor: "#fff"
         };
+
+        console.log(chainOption);
         this.myChainItem = new ChainChart(this.$refs.chainItemBox);
         this.myChainItem.init(chainOption);
         this.canvasBoxId = this.myChainItem.id;
@@ -179,7 +204,7 @@ export default {
     },
     // 请求产业链
     async searchChainItem(id) {
-      let res = await chainItemSearch({ id: id });
+      let res = await getParkChainList({ id: id });
       return res.data;
     },
     // 返回id 探查节点
@@ -187,11 +212,11 @@ export default {
       // 返回节点ID 请求相关公司信息
       console.log(item);
       // 获取节点探查列表
-      let _opt = {
-        name: item.text,
-        page: 1
-      };
-      this.getProbeUuid(_opt);
+      // let _opt = {
+      //   name: item.text,
+      //   page: 1
+      // };
+      // this.getProbeUuid(_opt);
     },
     // 请求节点数据
     async getProbeUuid(_opt) {
