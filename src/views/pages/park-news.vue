@@ -24,10 +24,10 @@
         <div>
           <img src="../../assets/img/noImg.png" alt="" />
           <p class="title">
-            <a :href="item.url" target="_blank"> {{ item.title }}</a>
+            <a :href="item.href" target="_blank"> {{ item.title }}</a>
           </p>
           <span class="source">{{ item.source }}</span>
-          <span class="time">{{ item.publishTime | timeFilter }}</span>
+          <span class="time">{{ item.publishDate | timeFilter }}</span>
         </div>
       </div>
       <div class="scrollText" v-if="newsList1.length !== 0">{{ tips1 }}</div>
@@ -45,10 +45,10 @@
         <div>
           <img src="../../assets/img/noImg.png" alt="" />
           <p class="title">
-            <a :href="item.url" target="_blank"> {{ item.title }}</a>
+            <a :href="item.href" target="_blank"> {{ item.title }}</a>
           </p>
           <span class="source">{{ item.source }}</span>
-          <span class="time">{{ item.publishTime | timeFilter }}</span>
+          <span class="time">{{ item.publishDate | timeFilter }}</span>
         </div>
       </div>
       <div class="scrollText" v-if="newsList2.length !== 0">{{ tips2 }}</div>

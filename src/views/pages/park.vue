@@ -31,7 +31,7 @@
         v-model="parkNameQ"
         class="parkNameSearch"
       >
-        <el-button slot="append" @click="getParkSearch">搜索</el-button>
+        <el-button slot="append" @click="searchButtomClick">搜索</el-button>
       </el-input>
     </div>
     <div class="parkTagsBox">
@@ -88,12 +88,14 @@
           type="selection"
           width="60"
           label-class-name="selectLable"
+          :show-overflow-tooltip="true"
         >
         </el-table-column>
         <el-table-column
           label="产业园名称"
           class-name="tableTextLeft"
           label-class-name="tableTextLeft"
+          :show-overflow-tooltip="true"
         >
           <template slot-scope="scope">
             <span @click="openInfoBox(scope.row)" class="pointerHover">{{
@@ -101,8 +103,18 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="base" label="地区" width="80"> </el-table-column>
-        <el-table-column label="成立时间" width="100">
+        <el-table-column
+          prop="base"
+          label="地区"
+          width="80"
+          :show-overflow-tooltip="true"
+        >
+        </el-table-column>
+        <el-table-column
+          label="成立时间"
+          width="100"
+          :show-overflow-tooltip="true"
+        >
           <template slot-scope="scope">
             <span>{{ scope.row.establishDate | timeFilter }} </span>
           </template>
@@ -112,30 +124,46 @@
           label="产业集群"
           class-name="tableTextLeft"
           label-class-name="tableTextLeft"
+          :show-overflow-tooltip="true"
         >
           <template slot-scope="scope">
             <span @click="linkParkChain(scope.row)">
-              <span
-                class="pointerHover"
-                v-for="(item, index) in scope.row.industries"
-                :key="index"
-                >{{ item }}，</span
-              >
+              <span class="pointerHover">{{
+                scope.row.industries && scope.row.industries.join("，")
+              }}</span>
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="phone" label="电话" width="120">
+        <el-table-column
+          prop="phone"
+          label="电话"
+          width="120"
+          :show-overflow-tooltip="true"
+        >
         </el-table-column>
-        <el-table-column prop="companyNum" label="注册企业" width="100">
+        <el-table-column
+          prop="companyNum"
+          label="注册企业"
+          width="100"
+          :show-overflow-tooltip="true"
+        >
         </el-table-column>
-        <el-table-column label="产业园名企" width="100">
+        <el-table-column
+          label="产业园名企"
+          width="100"
+          :show-overflow-tooltip="true"
+        >
           <template slot-scope="scope">
             <span @click="linkParkChain(scope.row)" class="pointerHover"
               >查看</span
             >
           </template>
         </el-table-column>
-        <el-table-column label="园区资讯" width="100">
+        <el-table-column
+          label="园区资讯"
+          width="100"
+          :show-overflow-tooltip="true"
+        >
           <template slot-scope="scope">
             <span @click="linkParkNews(scope.row)" class="pointerHover"
               >查看</span
@@ -250,6 +278,18 @@ export default {
       this.paramsPage = 1;
       this.getParkSearch();
     },
+    // 搜索按钮点击
+    searchButtomClick() {
+      let index = this.industryList.indexOf(this.parkNameQ);
+      if (index === -1) {
+        this.chainNameIndex = null;
+        this.paramsChainName = "";
+      } else {
+        this.chainNameIndex = index + 1;
+        this.paramsChainName = this.parkNameQ;
+      }
+      this.getParkSearch();
+    },
     // 地区点击
     baseItemClick(index) {
       if (index) {
@@ -267,9 +307,11 @@ export default {
       if (index) {
         this.chainNameIndex = index;
         this.paramsChainName = this.industryList[index - 1];
+        this.parkNameQ = this.industryList[index - 1];
       } else {
         this.chainNameIndex = null;
         this.paramsChainName = "";
+        this.parkNameQ = "";
       }
       this.paramsPage = 1;
       this.getParkSearch();
@@ -279,19 +321,41 @@ export default {
       let _opt = {
         base: this.locationVal === "全国" ? "" : this.locationVal,
         chainName: this.paramsChainName,
-        keyword: this.parkNameQ,
+        keyword: this.parkNameQ === this.paramsChainName ? "" : this.parkNameQ,
         page: this.paramsPage,
         pageSize: this.paramsPageSize,
         district: this.paramsDistrict
       };
       this.tableLoading = true;
-      getParkSearch(_opt).then(res => {
-        if (res.code === 200) {
-          this.tableData = res.data.parkInfoList;
-          this.parkStatics = res.data.parkStatics;
-        }
-        this.tableLoading = false;
-      });
+      getParkSearch(_opt)
+        .then(res => {
+          if (res.code === 200) {
+            this.tableData = res.data.parkInfoList;
+            this.parkStatics = res.data.parkStatics;
+          } else {
+            this.tableData = [];
+            this.parkStatics = {
+              base: "",
+              chainNum: 0,
+              companyNum: 0,
+              district: "",
+              parkNum: 0
+            };
+          }
+          this.tableLoading = false;
+        })
+        .catch(rej => {
+          console.log(rej);
+          this.tableData = [];
+          this.parkStatics = {
+            base: "",
+            chainNum: 0,
+            companyNum: 0,
+            district: "",
+            parkNum: 0
+          };
+          this.tableLoading = false;
+        });
     },
     // 勾选改变
     handleSelectionChange(val) {
@@ -434,6 +498,7 @@ export default {
     }
     .el-input__inner {
       height: 24px;
+      line-height: 24px;
       border-radius: 0;
     }
     .el-input-group__append {

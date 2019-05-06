@@ -200,6 +200,12 @@ div:focus {
 .el-table .cell {
   white-space: nowrap;
 }
+.el-table th.gutter {
+  display: table-cell !important;
+}
+.el-tooltip__popper.is-dark {
+  max-width: 60%;
+}
 .pointerHover {
   cursor: pointer;
 }

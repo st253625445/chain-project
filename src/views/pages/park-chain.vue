@@ -26,9 +26,14 @@
             type="selection"
             width="60"
             label-class-name="selectLable"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
-          <el-table-column width="60" label="序号">
+          <el-table-column
+            width="60"
+            label="序号"
+            :show-overflow-tooltip="true"
+          >
             <template slot-scope="scope">
               <span>
                 {{ scope.$index + (page - 1) * pageSize + 1 }}
@@ -39,6 +44,7 @@
             label="企业名称"
             class-name="tableTextLeft"
             label-class-name="tableTextLeft"
+            :show-overflow-tooltip="true"
           >
             <template slot-scope="scope">
               <span @click="clickFn(scope.row)" class="pointerHover">{{
@@ -46,49 +52,89 @@
               }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="relateChains" label="产业链板块">
+          <el-table-column
+            prop="relateChains"
+            label="产业链板块"
+            :show-overflow-tooltip="true"
+          >
             <template slot-scope="scope">
               <span
                 @click="openRelateChainsAll(scope.row)"
                 class="blueSpan pointerHover"
+                v-for="(item, index) in scope.row.relateChains"
+                :key="index"
               >
-                {{
-                  scope.row.relateChains
-                    ? `${scope.row.relateChains[0].chainName}...`
-                    : ""
-                }}
+                {{ item.chainName }}，
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="mainProducts" label="主要产品">
+          <el-table-column
+            prop="mainProducts"
+            label="主要产品"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column label="所在集团">
+          <el-table-column label="所在集团" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
                 >详情</span
               >
             </template>
           </el-table-column>
-          <el-table-column label="企业关联方">
+          <el-table-column label="企业关联方" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
                 >详情</span
               >
             </template>
           </el-table-column>
-          <el-table-column prop="regLocation" label="注册省市" sortable>
+          <el-table-column
+            prop="regLocation"
+            label="注册省市"
+            sortable
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="enterScale" label="企业规模" sortable>
+          <el-table-column
+            prop="enterScale"
+            label="企业规模"
+            sortable
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="lifeSpan" label="生存年限" sortable>
+          <el-table-column
+            prop="lifeSpan"
+            label="生存年限"
+            sortable
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="enterType" label="企业类型" sortable>
+          <el-table-column
+            prop="enterType"
+            label="企业类型"
+            sortable
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="currency" label="注册资金币种" sortable>
+          <el-table-column
+            prop="currency"
+            label="注册资金币种"
+            sortable
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="regCapital" label="注册资金" sortable>
+          <el-table-column
+            prop="regCapital"
+            label="注册资金"
+            sortable
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column label="成立时间" sortable>
+          <el-table-column
+            label="成立时间"
+            sortable
+            :show-overflow-tooltip="true"
+          >
             <template slot-scope="scope">
               <span>{{ scope.row.establishTime | timeFilter }} </span>
             </template>
@@ -104,26 +150,10 @@
         >
         </el-pagination>
       </div>
-      <div
-        class="relateChainsAllBox"
-        v-show="relateChainsAllShow"
-        v-clickoutside="closeRelateChainsAll"
-      >
-        <div class="title">产业链板块</div>
-        <div class="chainsCount">
-          <div>
-            <span v-for="(item, index) in relateChainsAllData" :key="index">{{
-              item.chainName
-            }}</span>
-          </div>
-        </div>
-        <div class="submit" @click="closeRelateChainsAll">确 定</div>
-      </div>
     </div>
   </div>
 </template>
 <script>
-import Clickoutside from "element-ui/src/utils/clickoutside";
 import chainPane from "@/components/parkPage/chainCanvas";
 import { getParkCompanyList } from "@/api/getData";
 export default {
@@ -134,8 +164,6 @@ export default {
       page: 1,
       pageSize: 5,
       enterNum: 0,
-      relateChainsAllShow: false,
-      relateChainsAllData: [],
       tableData: []
     };
   },
@@ -157,7 +185,6 @@ export default {
       console.log(err);
     }
   },
-  directives: { Clickoutside },
   methods: {
     getParkCompanyList() {
       if (this.parkId) {
@@ -186,20 +213,6 @@ export default {
     // 排序改变
     sortChange(params) {
       console.log(params);
-    },
-    // 展示所有产业链板块
-    openRelateChainsAll(params) {
-      let _data = params.relateChains;
-      if (_data && _data.length > 0) {
-        this.relateChainsAllData = _data;
-        this.$nextTick(() => {
-          this.relateChainsAllShow = true;
-        });
-      }
-    },
-    // 隐藏显示所有产业链板块
-    closeRelateChainsAll() {
-      this.relateChainsAllShow = false;
     },
     clickFn(params) {
       console.log(params);
