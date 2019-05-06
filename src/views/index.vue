@@ -79,16 +79,20 @@
           v-model.trim="companyQuery"
           @select="companyItemClick"
         ></el-autocomplete>
-        <el-autocomplete
+        <el-input
           v-if="searchTab === '2'"
           class="autocomplete"
-          popper-class="autocompletePopper"
-          :fetch-suggestions="searchCompany"
-          :trigger-on-focus="false"
+          popper-class="autocomplete-main"
           placeholder="请输入产业园区名称或简称"
-          v-model.trim="companyQuery"
-          @select="companyItemClick"
-        ></el-autocomplete>
+          @keyup.enter.native="searchPark"
+          v-model.trim="parkQuery"
+        >
+          <i
+            slot="suffix"
+            class="el-input__icon el-icon-search"
+            @click="searchPark"
+          ></i>
+        </el-input>
       </div>
       <div class="listTab">
         <div>
@@ -218,6 +222,7 @@ export default {
       state: true,
       chainQuery: "",
       companyQuery: "",
+      parkQuery: "",
       panelShow: false,
       companyitems: [],
       newsLists: [],
@@ -293,7 +298,7 @@ export default {
             if (res.code === 200) {
               let _datas = res.data;
               for (let i = 0; i < _datas.length; i++) {
-                _datas[i]["value"] = _datas[i].name;
+                _datas[i]["value"] = _datas[i].companyName;
               }
               cb(_datas);
               this.companyitems = _datas;
@@ -304,9 +309,23 @@ export default {
           });
       }
     },
+    // 搜索产业园区
+    searchPark() {
+      if (!this.parkQuery) {
+        this.$message({
+          showClose: true,
+          message: "请输入关键词",
+          type: "error"
+        });
+        return false;
+      }
+      let _query = {
+        parkQuery: this.parkQuery
+      };
+      this.$router.push({ path: "/park", query: _query });
+    },
     // 公司名称跳转
     companyItemClick(data) {
-      console.log(data);
       let routeData = this.$router.resolve({
         path: "/company",
         query: { companyId: data.companyId }

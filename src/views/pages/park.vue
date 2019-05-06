@@ -27,37 +27,53 @@
         </transition>
       </span>
       <el-input
-        placeholder="产业园名称关键字"
+        placeholder="请输入产业园、产业集群关键字"
         v-model="parkNameQ"
         class="parkNameSearch"
       >
-        <el-button slot="append">搜索</el-button>
+        <el-button slot="append" @click="getParkSearch">搜索</el-button>
       </el-input>
     </div>
     <div class="parkTagsBox">
       <div class="tagsUl">
         <ul>
-          <li class="active"><span>全部</span></li>
-          <li v-for="(item, index) in locationList" :key="index">
-            <span>{{ item }}</span>
+          <li :class="{ active: !baseIndex }">
+            <span @click="baseItemClick()">全部</span>
+          </li>
+          <li
+            v-for="(item, index) in locationList"
+            :key="index"
+            :class="{ active: baseIndex && baseIndex === index + 1 }"
+          >
+            <span @click="baseItemClick(index + 1)">{{ item }}</span>
           </li>
         </ul>
         <p class="title">地区</p>
       </div>
       <div class="tagsUl">
         <ul>
-          <li class="active"><span>全部</span></li>
-          <li v-for="(item, index) in industryList" :key="index">
-            <span>{{ item }}</span>
+          <li :class="{ active: !chainNameIndex }">
+            <span @click="chainNameItemClick()">全部</span>
+          </li>
+          <li
+            v-for="(item, index) in industryList"
+            :key="index"
+            :class="{ active: chainNameIndex && chainNameIndex === index + 1 }"
+          >
+            <span @click="chainNameItemClick(index + 1)">{{ item }}</span>
           </li>
         </ul>
         <p class="title">热门产业</p>
       </div>
     </div>
-    <div class="parkList">
+    <div class="parkList" v-loading="tableLoading">
       <p class="title">
         <span class="subTitle"
-          >北京区域共计5个产业园，涉及30个产业链，79家明星企业</span
+          >{{ parkStatics.base }}{{ parkStatics.district }}区域共计{{
+            parkStatics.parkNum
+          }}个产业园，涉及{{ parkStatics.chainNum }}个产业链，{{
+            parkStatics.companyNum
+          }}家明星企业</span
         >
       </p>
       <el-table
@@ -70,30 +86,56 @@
       >
         <el-table-column
           type="selection"
-          width="85"
+          width="60"
           label-class-name="selectLable"
         >
         </el-table-column>
-        <el-table-column label="产业园名称">
+        <el-table-column
+          label="产业园名称"
+          class-name="tableTextLeft"
+          label-class-name="tableTextLeft"
+        >
           <template slot-scope="scope">
             <span @click="openInfoBox(scope.row)" class="pointerHover">{{
-              scope.row.data1
+              scope.row.name
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="data2" label="地区"> </el-table-column>
-        <el-table-column prop="data3" label="成立时间"> </el-table-column>
-        <el-table-column prop="data3" label="产业集群"> </el-table-column>
-        <el-table-column prop="data3" label="电话"> </el-table-column>
-        <el-table-column prop="data3" label="注册企业"> </el-table-column>
-        <el-table-column label="产业园名企">
+        <el-table-column prop="base" label="地区" width="80"> </el-table-column>
+        <el-table-column label="成立时间" width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.establishDate | timeFilter }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="industries"
+          label="产业集群"
+          class-name="tableTextLeft"
+          label-class-name="tableTextLeft"
+        >
+          <template slot-scope="scope">
+            <span @click="linkParkChain(scope.row)">
+              <span
+                class="pointerHover"
+                v-for="(item, index) in scope.row.industries"
+                :key="index"
+                >{{ item }}，</span
+              >
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="phone" label="电话" width="120">
+        </el-table-column>
+        <el-table-column prop="companyNum" label="注册企业" width="100">
+        </el-table-column>
+        <el-table-column label="产业园名企" width="100">
           <template slot-scope="scope">
             <span @click="linkParkChain(scope.row)" class="pointerHover"
               >查看</span
             >
           </template>
         </el-table-column>
-        <el-table-column prop="data3" label="园区资讯">
+        <el-table-column label="园区资讯" width="100">
           <template slot-scope="scope">
             <span @click="linkParkNews(scope.row)" class="pointerHover"
               >查看</span
@@ -105,25 +147,18 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :page-sizes="[5, 10, 20]"
-        :page-size="100"
+        :page-size="paramsPageSize"
         layout="prev, pager, next, sizes, jumper"
-        :total="400"
+        :total="parkStatics.parkNum"
+        :current-page="paramsPage"
       >
       </el-pagination>
     </div>
     <div class="parkInfoBox" v-if="infoBoxShow" v-clickoutside="closeInfoBox">
-      <div class="title">张江高科技园区</div>
-      <div class="infoCount">
+      <div class="title">{{ parkInfoTitle }}</div>
+      <div class="infoCount" v-loading="parkInfoLoading">
         <div>
-          <p>
-            截止2012年底，园区累计注册企业9164家；从业人员27万，本科学历以上占比超过60%。实现经营总收入4200亿元，同比增长13.5%；工业总产值2084亿元，同比增长19.75%；固定资产投资206亿元，同比增长1.93%；税收收入189.15亿元，同比增长10.6%。成为浦东发展的重要增长极。根据“2012年上海市开发区综合评价”，张江高科技园区再度蝉联综合排名第一，同时在创新发展和投资环境指标上也排名第一。
-          </p>
-          <p>
-            经过20年的开发，园区构筑了生物医药创新链和集成电路产业链的框架。目前，园区建有国家上海生物医药科技产业基地、国家信息产业基地、国家集成电路产业基地、
-          </p>
-          <p>
-            国家半导体照明产业基地、国家863信息安全成果产业化（东部）基地、国家软件产业基地、国家软件出口基地、国家文化产业示范基地、国家网游动漫产业发展基地等多个国家级基地。在科技创新方面，园区拥有多模式、多类型的孵化器，建有国家火炬创业园、国家留学人员创业园，一批新经济企业实现了大踏步的飞跃。“自我设计、自主经营、自由竞争”和“鼓励成功、宽容失败”的园区文化和创业氛围正逐渐形成。
-          </p>
+          <p>{{ parkInfoCount }}</p>
         </div>
       </div>
       <div class="submit" @click="closeInfoBox">确 定</div>
@@ -132,97 +167,23 @@
 </template>
 <script>
 import Clickoutside from "element-ui/src/utils/clickoutside";
+import { getParkBaseInfo, getParkSearch, getParkInfo } from "@/api/getData";
 export default {
   data() {
     return {
       locationVal: "全国",
       dropdownShow: false,
       infoBoxShow: false,
+      tableLoading: true,
       parkNameQ: "",
-      locationList: [
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区"
-      ],
-      industryList: [
-        "快递",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备"
-      ],
-      tableData: [
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        }
-      ],
+      baseDistricts: {},
+      locationList: [],
+      industryList: [],
+      baseIndex: null,
+      chainNameIndex: null,
+      tableData: [],
       locationData: {
-        全国: ["全国", "京津冀"],
+        全国: ["全国"],
         直辖市: ["北京", "上海", "天津", "重庆"],
         华北: ["河北", "山西", "内蒙古"],
         华东: ["山东", "江苏", "安徽", "江西", "浙江", "福建", "台湾"],
@@ -231,11 +192,50 @@ export default {
         西南: ["四川", "贵州", "云南", "西藏"],
         西北: ["陕西", "甘肃", "宁夏", "新疆", "青海"],
         东北: ["黑龙江", "吉林", "辽宁"]
-      }
+      },
+      parkStatics: {
+        base: "",
+        chainNum: 0,
+        companyNum: 0,
+        district: "",
+        parkNum: 0
+      },
+      paramsDistrict: "",
+      paramsChainName: "",
+      paramsPage: 1,
+      paramsPageSize: 5,
+      parkInfoTitle: "",
+      parkInfoCount: "",
+      parkInfoLoading: true
     };
   },
+  filters: {
+    timeFilter(val) {
+      if (val) {
+        return val.substring(0, 10);
+      }
+    }
+  },
   directives: { Clickoutside },
+  mounted() {
+    let query = this.$route.query;
+    if (query.parkQuery) {
+      this.parkNameQ = query.parkQuery;
+    }
+    this.getBaseInfo();
+    this.getParkSearch();
+  },
   methods: {
+    // 获取行政区划/热门行业标签
+    getBaseInfo() {
+      getParkBaseInfo().then(res => {
+        if (res.code === 200) {
+          this.baseDistricts = res.data.baseDistricts;
+          this.industryList = res.data.chainNames;
+          this.locationList = this.baseDistricts["全国"];
+        }
+      });
+    },
     // 下拉外部点击隐藏下拉
     dropdownOutClick() {
       this.dropdownShow = false;
@@ -243,7 +243,55 @@ export default {
     // 城市筛选点击
     locationDropdownItemClick(data) {
       this.locationVal = data;
+      this.locationList = this.baseDistricts[data];
+      this.baseIndex = null;
+      this.paramsDistrict = "";
       this.dropdownShow = false;
+      this.paramsPage = 1;
+      this.getParkSearch();
+    },
+    // 地区点击
+    baseItemClick(index) {
+      if (index) {
+        this.baseIndex = index;
+        this.paramsDistrict = this.locationList[index - 1];
+      } else {
+        this.baseIndex = null;
+        this.paramsDistrict = "";
+      }
+      this.paramsPage = 1;
+      this.getParkSearch();
+    },
+    // 热门产业点击
+    chainNameItemClick(index) {
+      if (index) {
+        this.chainNameIndex = index;
+        this.paramsChainName = this.industryList[index - 1];
+      } else {
+        this.chainNameIndex = null;
+        this.paramsChainName = "";
+      }
+      this.paramsPage = 1;
+      this.getParkSearch();
+    },
+    // 根据地址和产业链名查询产业园
+    getParkSearch() {
+      let _opt = {
+        base: this.locationVal === "全国" ? "" : this.locationVal,
+        chainName: this.paramsChainName,
+        keyword: this.parkNameQ,
+        page: this.paramsPage,
+        pageSize: this.paramsPageSize,
+        district: this.paramsDistrict
+      };
+      this.tableLoading = true;
+      getParkSearch(_opt).then(res => {
+        if (res.code === 200) {
+          this.tableData = res.data.parkInfoList;
+          this.parkStatics = res.data.parkStatics;
+        }
+        this.tableLoading = false;
+      });
     },
     // 勾选改变
     handleSelectionChange(val) {
@@ -255,15 +303,30 @@ export default {
     },
     // 页码每页条数改变
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.paramsPageSize = val;
+      this.paramsPage = 1;
+      this.getParkSearch();
     },
     // 页码跳转
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.paramsPage = val;
+      this.getParkSearch();
     },
     // 显示园区信息
-    openInfoBox() {
+    openInfoBox(data) {
+      this.parkInfoTitle = data.name;
+      this.parkInfoCount = "";
       this.infoBoxShow = true;
+      this.parkInfoLoading = true;
+      let _opt = {
+        id: data.id
+      };
+      getParkInfo(_opt).then(res => {
+        if (res.code === 200) {
+          this.parkInfoCount = res.data;
+        }
+        this.parkInfoLoading = false;
+      });
     },
     // 园区信息外部点击隐藏
     closeInfoBox() {
@@ -273,8 +336,8 @@ export default {
     linkParkChain(data) {
       console.log(data);
       let _query = {
-        chainId: this.$route.query.chainId,
-        nodeName: this.$route.query.nodeName
+        parkId: data.id,
+        parkName: data.name
       };
       let routeData = this.$router.resolve({
         path: "/parkChain",
@@ -286,8 +349,7 @@ export default {
     linkParkNews(data) {
       console.log(data);
       let _query = {
-        chainId: this.$route.query.chainId,
-        nodeName: this.$route.query.nodeName
+        parkId: data.id
       };
       let routeData = this.$router.resolve({
         path: "/parkNews",
@@ -447,12 +509,13 @@ export default {
         line-height: 1.2;
       }
     }
-    .el-table .cell {
-      text-align: center;
-    }
     .el-table td,
     .el-table th.is-leaf {
+      text-align: center;
       border-bottom: none;
+    }
+    .el-table .tableTextLeft {
+      text-align: left;
     }
     .el-table th {
       background-color: #fbfbfb;

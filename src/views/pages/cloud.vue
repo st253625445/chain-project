@@ -26,10 +26,12 @@ export default {
     cloudBar,
     cloudMap
   },
-  mounted() {
+  created() {
     let _name = this.$route.query.nodeName;
     if (_name) {
       this.getIndustryDistribution(_name);
+    } else {
+      this.$router.push("/");
     }
   },
   methods: {

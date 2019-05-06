@@ -1,6 +1,7 @@
 <template>
   <div class="fundAllPage">
-    <div class="seach-header">
+    <h1>暂未开发，敬请期待！</h1>
+    <!-- <div class="seach-header">
       <span
         class="dropdown-link"
         @click="dropdownShow = !dropdownShow"
@@ -134,7 +135,7 @@
         </div>
       </div>
       <div class="submit" @click="closeInfoBox">确 定</div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

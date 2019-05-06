@@ -23,7 +23,7 @@ export function resetPassword(json) {
 // 公司搜索匹配
 export function getSearchCompany(name) {
   return request({
-    url: `/chain/search?keyword=${name}`,
+    url: `/company/search?keyword=${name}`,
     method: "get",
     data: {
       keyword: name
@@ -131,6 +131,56 @@ export function getPolicyList(json) {
     url: `/node/policy/list?nodeName=${json.name}&page=${
       json.page
     }&department=${json.department}`,
+    method: "get"
+  });
+}
+// 产业园区相关
+// 首次加载基本信息: 行政区划等
+export function getParkBaseInfo() {
+  return request({
+    url: `/park/baseInfo`,
+    method: "get"
+  });
+}
+
+//地址+产业链名字，搜索，数据统计
+export function getParkSearch(json) {
+  return request({
+    url: `/park/search?base=${json.base}&chainName=${json.chainName}&keyword=${
+      json.keyword
+    }&page=${json.page}&district=${json.district}&pageSize=${json.pageSize}`,
+    method: "get"
+  });
+}
+// 园区简介
+export function getParkInfo(json) {
+  return request({
+    url: `/park/info?id=${json.id}`,
+    method: "get"
+  });
+}
+// 园区相关的产业链(集群)
+export function getParkChainList(json) {
+  return request({
+    url: `/park/chain/list?id=${json.id}`,
+    method: "get"
+  });
+}
+// 园区相关企业
+export function getParkCompanyList(json) {
+  return request({
+    url: `/park/company/list?id=${json.id}&page=${json.page}&pageSize=${
+      json.pageSize
+    }`,
+    method: "get"
+  });
+}
+// 园区相关政策和新闻
+export function getParkNewsPolicy(json) {
+  return request({
+    url: `/park/newsPolicy?id=${json.id}&type=${json.type}&page=${
+      json.page
+    }&pageSize=${json.pageSize}`,
     method: "get"
   });
 }

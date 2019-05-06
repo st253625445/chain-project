@@ -1,6 +1,7 @@
 <template>
   <div class="fundPage">
-    <div class="itemBox fundTotalBox">
+    <h1>暂未开发，敬请期待！</h1>
+    <!-- <div class="itemBox fundTotalBox">
       <p class="title">产业基金投资概况</p>
       <p class="fundTotal">
         该产业链下的产业基金共<span class="blueSpan"> 13 </span
@@ -94,7 +95,7 @@
         </div>
       </div>
       <div class="submit" @click="closeInfoBox">确 定</div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

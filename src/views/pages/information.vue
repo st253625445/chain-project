@@ -42,8 +42,8 @@
                 @click="getIndustryResearchFile(item.file)"
                 v-if="typeTab === 1"
               >
-                {{ item.title }}</a
-              >
+                {{ item.title }}
+              </a>
               <a :href="item.url" target="_blank" v-else> {{ item.title }}</a>
             </p>
             <span class="source">{{ item.source }}</span>
@@ -77,10 +77,12 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     let query = this.$route.query;
     if (query.chainId) {
       this.getNodeList(query.chainId);
+    } else {
+      this.$router.push("/");
     }
   },
   methods: {

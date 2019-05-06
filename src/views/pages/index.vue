@@ -144,6 +144,14 @@ export default {
     };
   },
   components: { chainPane },
+  created() {
+    let query = this.$route.query;
+    if (query.chainId || query.keyword) {
+      console.log(query.chainId);
+    } else {
+      this.$router.push("/");
+    }
+  },
   mounted() {
     chainCategories().then(res => {
       console.log(res);

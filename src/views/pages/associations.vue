@@ -1,6 +1,7 @@
 <template>
   <div class="associationsPage">
-    <div class="seach-header">
+    <h1>暂未开发，敬请期待！</h1>
+    <!-- <div class="seach-header">
       <el-input
         placeholder="协会名称关键字"
         v-model="associationsNameQ"
@@ -91,7 +92,7 @@
         </div>
       </div>
       <div class="submit" @click="closeInfoBox">确 定</div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

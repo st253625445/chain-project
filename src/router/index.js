@@ -47,6 +47,13 @@ export const constantRouterMap = [
         component: () => import("@/views/pages/members")
       },
       {
+        path: "company",
+        name: "company",
+        hidden: true,
+        meta: { title: "企业画像", activePath: "members" },
+        component: () => import("@/views/pages/company")
+      },
+      {
         path: "portrait",
         name: "portrait",
         meta: { title: "行业画像", activePath: "portrait" },
@@ -129,11 +136,6 @@ export const constantRouterMap = [
         component: () => import("@/views/pages/associations-chain")
       }
     ]
-  },
-  {
-    path: "/company",
-    redirect: "/404",
-    hidden: true
   },
   {
     path: "/pdf",
