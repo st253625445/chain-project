@@ -171,7 +171,7 @@ export function getParkCompanyList(json) {
   return request({
     url: `/park/company/list?id=${json.id}&page=${json.page}&pageSize=${
       json.pageSize
-    }`,
+    }&orderField=${json.orderField}&order=${json.order}`,
     method: "get"
   });
 }
