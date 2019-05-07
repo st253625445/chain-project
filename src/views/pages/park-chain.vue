@@ -91,48 +91,48 @@
           <el-table-column
             prop="regLocation"
             label="注册省市"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
           <el-table-column
             prop="enterScale"
             label="企业规模"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
           <el-table-column
             prop="lifeSpan"
             label="生存年限"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
           <el-table-column
             prop="enterType"
             label="企业类型"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
           <el-table-column
             prop="currency"
             label="注册资金币种"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
           <el-table-column
             prop="regCapital"
             label="注册资金"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
           <el-table-column
             label="成立时间"
-            sortable
+            sortable="custom"
             :show-overflow-tooltip="true"
           >
             <template slot-scope="scope">
@@ -163,6 +163,8 @@ export default {
       parkId: "",
       page: 1,
       pageSize: 5,
+      orderField: 0,
+      order: 0,
       enterNum: 0,
       tableData: []
     };
@@ -191,18 +193,24 @@ export default {
         let _opt = {
           id: this.parkId,
           page: this.page,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          orderField: this.orderField,
+          order: this.order
         };
         getParkCompanyList(_opt)
           .then(res => {
             if (res.code === 200) {
-              console.log(res);
               this.tableData = res.data.companyParkList;
               this.enterNum = res.data.parkCompanyStatic.otherCount;
+            } else {
+              this.tableData = [];
+              this.enterNum = 0;
             }
           })
           .catch(rej => {
             console.log(rej);
+            this.tableData = [];
+            this.enterNum = 0;
           });
       }
     },
@@ -212,7 +220,22 @@ export default {
     },
     // 排序改变
     sortChange(params) {
-      console.log(params);
+      let field;
+      this.order = 0;
+      switch (params.prop) {
+        case "regLocation":
+          field = 1;
+          this.order = params.order
+            ? params.order === "ascending"
+              ? 1
+              : 2
+            : 0;
+          break;
+        default:
+          field = 0;
+      }
+      this.orderField = field;
+      this.getParkCompanyList();
     },
     clickFn(params) {
       console.log(params);
