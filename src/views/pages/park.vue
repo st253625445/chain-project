@@ -30,6 +30,7 @@
         placeholder="请输入产业园、产业集群关键字"
         v-model="parkNameQ"
         class="parkNameSearch"
+        @keyup.enter.native="searchButtomClick"
       >
         <el-button slot="append" @click="searchButtomClick">搜索</el-button>
       </el-input>

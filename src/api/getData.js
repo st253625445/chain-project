@@ -184,3 +184,43 @@ export function getParkNewsPolicy(json) {
     method: "get"
   });
 }
+// v2.02协会联盟
+// 协会联盟基础信息
+export function getSocialOrganBaseInfo() {
+  return request({
+    url: `/socialOrgan/baseInfo`,
+    method: "get"
+  });
+}
+// 关键词+热门行业查询
+export function getSocialOrganList(json) {
+  return request({
+    url: `/socialOrgan/list?keyword=${json.keyword}&hotIndustryName=${
+      json.hotIndustryName
+    }&page=${json.page}&pageSize=${json.pageSize}`,
+    method: "get"
+  });
+}
+// 协会联盟简介信息
+export function getSocialOrganInfo(id) {
+  return request({
+    url: `/socialOrgan/info?id=${id}`,
+    method: "get"
+  });
+}
+// 协会联盟成员列表
+export function getSocialOrganMembers(json) {
+  return request({
+    url: `/socialOrgan/member/list?id=${json.id}&page=${json.page}&pageSize=${
+      json.pageSize
+    }&orderFieldNum=${json.orderField}&orderNum=${json.order}`,
+    method: "get"
+  });
+}
+// 协会联盟谱系信息
+export function getSocialOrganPedigree(json) {
+  return request({
+    url: `/socialOrgan/pedigree?id=${json.id}`,
+    method: "get"
+  });
+}
