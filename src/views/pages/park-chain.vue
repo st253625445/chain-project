@@ -147,6 +147,7 @@
           :page-size="pageSize"
           layout="prev, pager, next, sizes, jumper"
           :total="enterNum"
+          :current-page="page"
         >
         </el-pagination>
       </div>
@@ -159,7 +160,7 @@ import { getParkCompanyList } from "@/api/getData";
 export default {
   data() {
     return {
-      parkName: "张江高科技园区",
+      parkName: "",
       parkId: "",
       page: 1,
       pageSize: 5,
@@ -221,19 +222,32 @@ export default {
     // 排序改变
     sortChange(params) {
       let field;
-      this.order = 0;
       switch (params.prop) {
         case "regLocation":
           field = 1;
-          this.order = params.order
-            ? params.order === "ascending"
-              ? 1
-              : 2
-            : 0;
           break;
+        // case "enterScale":
+        //   field = 2;
+        //   break;
+        // case "lifeSpan":
+        //   field = 3;
+        //   break;
+        // case "enterType":
+        //   field = 4;
+        //   break;
+        // case "currency":
+        //   field = 5;
+        //   break;
+        // case "regCapital":
+        //   field = 6;
+        //   break;
+        // case "establishTime":
+        //   field = 7;
+        //   break;
         default:
           field = 0;
       }
+      this.order = params.order ? (params.order === "ascending" ? 1 : 2) : 0;
       this.orderField = field;
       this.getParkCompanyList();
     },
