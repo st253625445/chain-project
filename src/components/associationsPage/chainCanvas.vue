@@ -156,23 +156,58 @@ export default {
         this.chainTitle = this.centerName = name;
         this.collectionType = _itemData.userFlag || 0;
         this.inChainLoading = false;
+        let typeName = "协会成员";
+        let keys = Object.keys(_itemData);
+        if (keys.length === 1) {
+          typeName = keys[0];
+        }
+
         let _nodeList = () => {
-          return _itemData.map(item => {
-            return {
-              explorable: 0,
-              name: item.name,
-              nextNodeList: [],
-              nodeId: item.id,
-              region: "down",
-              type: "downstream",
-              typeDesc: "会员单位"
-            };
-          });
+          if (keys.length === 1) {
+            typeName = keys[0];
+            return _itemData[typeName].map(item => {
+              return {
+                explorable: 0,
+                name: item.name,
+                nextNodeList: [],
+                nodeId: item.id,
+                region: "down",
+                type: "downstream",
+                typeDesc: typeName
+              };
+            });
+          } else if (keys.length > 1) {
+            let nodeList = [];
+            for (let key in _itemData) {
+              nodeList.push({
+                explorable: 0,
+                name: key,
+                nextNodeList: _itemData[key].map(item => {
+                  return {
+                    explorable: 0,
+                    name: item.name,
+                    nextNodeList: [],
+                    nodeId: item.id,
+                    region: "down",
+                    type: "downstream",
+                    typeDesc: typeName
+                  };
+                }),
+                nodeId: "",
+                region: "down",
+                type: "downstream",
+                typeDesc: typeName
+              });
+            }
+            return nodeList;
+          } else {
+            return [];
+          }
         };
         let chainOption = {
           data: {
             downRegion: {
-              name: "会员单位",
+              name: typeName,
               nodeList: _nodeList()
             },
             leftRegion: { name: "", nodeList: [] },
@@ -205,7 +240,7 @@ export default {
     async searchChainItem(id) {
       let res = await getSocialOrganPedigree({ id: id });
       if (res.code === 200) {
-        return res.data["会员单位"];
+        return res.data;
       } else {
         return [];
       }
