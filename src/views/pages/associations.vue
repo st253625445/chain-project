@@ -355,6 +355,7 @@ export default {
     }
     .el-input__inner {
       height: 24px;
+      line-height: 24px;
       border-radius: 0;
     }
     .el-input-group__append {
@@ -400,8 +401,9 @@ export default {
     }
     .title {
       position: absolute;
-      width: 48px;
-      text-align: justify;
+      width: 50px;
+      text-align: left;
+      font-size: 12px;
       left: 20px;
       top: 10px;
       color: #000;
