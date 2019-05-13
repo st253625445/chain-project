@@ -54,6 +54,16 @@
             @click="searchTabChange('2')"
             >产业园区</span
           >
+          <span
+            :class="searchTab === '3' ? 'active' : ''"
+            @click="searchTabChange('3')"
+            >产业基金</span
+          >
+          <span
+            :class="searchTab === '4' ? 'active' : ''"
+            @click="searchTabChange('4')"
+            >协会联盟</span
+          >
         </div>
         <el-input
           v-if="searchTab === '0'"
@@ -91,6 +101,34 @@
             slot="suffix"
             class="el-input__icon el-icon-search"
             @click="searchPark"
+          ></i>
+        </el-input>
+        <el-input
+          v-if="searchTab === '3'"
+          class="autocomplete"
+          popper-class="autocomplete-main"
+          placeholder="请输入产业基金名称或简称"
+          @keyup.enter.native="searchFund"
+          v-model.trim="fundQuery"
+        >
+          <i
+            slot="suffix"
+            class="el-input__icon el-icon-search"
+            @click="searchFund"
+          ></i>
+        </el-input>
+        <el-input
+          v-if="searchTab === '4'"
+          class="autocomplete"
+          popper-class="autocomplete-main"
+          placeholder="请输入协会联盟名称或简称"
+          @keyup.enter.native="searchAssociations"
+          v-model.trim="associationsQuery"
+        >
+          <i
+            slot="suffix"
+            class="el-input__icon el-icon-search"
+            @click="searchAssociations"
           ></i>
         </el-input>
       </div>
@@ -223,6 +261,8 @@ export default {
       chainQuery: "",
       companyQuery: "",
       parkQuery: "",
+      associationsQuery: "",
+      fundQuery: "",
       panelShow: false,
       companyitems: [],
       newsLists: [],
@@ -323,6 +363,34 @@ export default {
         parkQuery: this.parkQuery
       };
       this.$router.push({ path: "/park", query: _query });
+    },
+    searchAssociations() {
+      if (!this.associationsQuery) {
+        this.$message({
+          showClose: true,
+          message: "请输入关键词",
+          type: "error"
+        });
+        return false;
+      }
+      let _query = {
+        associationsQuery: this.associationsQuery
+      };
+      this.$router.push({ path: "/associations", query: _query });
+    },
+    searchFund() {
+      if (!this.fundQuery) {
+        this.$message({
+          showClose: true,
+          message: "请输入关键词",
+          type: "error"
+        });
+        return false;
+      }
+      let _query = {
+        fundQuery: this.fundQuery
+      };
+      this.$router.push({ path: "/fund", query: _query });
     },
     // 公司名称跳转
     companyItemClick(data) {

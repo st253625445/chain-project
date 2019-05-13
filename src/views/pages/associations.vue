@@ -91,6 +91,12 @@
           :show-overflow-tooltip="true"
         >
         </el-table-column>
+        <el-table-column
+          prop="memberCount"
+          label="会员个数"
+          :show-overflow-tooltip="true"
+        >
+        </el-table-column>
         <el-table-column label="协会成员" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span
@@ -160,6 +166,10 @@ export default {
   },
   directives: { Clickoutside },
   mounted() {
+    let query = this.$route.query;
+    if (query.associationsQuery) {
+      this.associationsNameQ = query.associationsQuery;
+    }
     this.getBaseInfo();
     this.getList();
   },
@@ -190,7 +200,6 @@ export default {
       };
       this.tableLoading = true;
       getSocialOrganList(_opt).then(res => {
-        console.log(res);
         this.tableLoading = false;
         if (res.code === 200) {
           this.tableData = res.data.socialOrganList;
@@ -267,7 +276,6 @@ export default {
     },
     // 链接协会成员
     linkAssociationsChain(data) {
-      console.log(data);
       let _query = {
         socialOrganId: data.id,
         socialOrganName: data.socialOrganizationName
