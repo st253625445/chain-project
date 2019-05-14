@@ -390,7 +390,7 @@ export default {
       let _query = {
         fundQuery: this.fundQuery
       };
-      this.$router.push({ path: "/fund", query: _query });
+      this.$router.push({ path: "/fundAll", query: _query });
     },
     // 公司名称跳转
     companyItemClick(data) {
