@@ -331,7 +331,7 @@ export default {
       padding: 10px 20px;
       border: 1px solid #4b61e7;
       background: #fff;
-      z-index: 2;
+      z-index: 2002;
       ul {
         width: 100%;
       }

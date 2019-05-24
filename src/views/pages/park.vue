@@ -9,7 +9,7 @@
         {{ locationVal }}
         <i class="el-icon-arrow-down el-icon--right"></i>
         <i class="borderMask" v-if="dropdownShow"></i>
-        <transition name="dropdown">
+        <transition name="el-zoom-in-top">
           <div class="dropdownBox" v-if="dropdownShow" @click.stop>
             <ul>
               <li v-for="(item, key, index) of locationData" :key="index">
@@ -347,15 +347,17 @@ export default {
         })
         .catch(rej => {
           console.log(rej);
-          this.tableData = [];
-          this.parkStatics = {
-            base: "",
-            chainNum: 0,
-            companyNum: 0,
-            district: "",
-            parkNum: 0
-          };
-          this.tableLoading = false;
+          if (!rej.__CANCEL__) {
+            this.tableData = [];
+            this.parkStatics = {
+              base: "",
+              chainNum: 0,
+              companyNum: 0,
+              district: "",
+              parkNum: 0
+            };
+            this.tableLoading = false;
+          }
         });
     },
     // 勾选改变
@@ -467,7 +469,7 @@ export default {
       padding: 10px 20px;
       border: 1px solid #4b61e7;
       background: #fff;
-      z-index: 2;
+      z-index: 2002;
       ul {
         width: 100%;
       }
