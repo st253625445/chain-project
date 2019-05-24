@@ -221,9 +221,15 @@ export default {
     // 热门产业点击
     chainNameItemClick(index) {
       if (index) {
-        this.chainNameIndex = index;
-        this.paramsChainName = this.tradeList[index - 1];
-        this.associationsNameQ = this.tradeList[index - 1];
+        if (index === this.chainNameIndex) {
+          this.chainNameIndex = null;
+          this.paramsChainName = "";
+          this.associationsNameQ = "";
+        } else {
+          this.chainNameIndex = index;
+          this.paramsChainName = this.tradeList[index - 1];
+          this.associationsNameQ = this.tradeList[index - 1];
+        }
       } else {
         this.chainNameIndex = null;
         this.paramsChainName = "";
