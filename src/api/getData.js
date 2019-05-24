@@ -224,3 +224,73 @@ export function getSocialOrganPedigree(json) {
     method: "get"
   });
 }
+// v2.03
+// 产业基金全量搜索基本信息
+export function getCbcBaseInfo() {
+  return request({
+    url: `/cbc/baseInfo`,
+    method: "get"
+  });
+}
+// 产业基金全量搜索
+export function getCbcSearch(json) {
+  return request({
+    url: `/cbc/search?base=${json.base}&district=${
+      json.district
+    }&regCapitalJson=${json.regCapitalJson}&paidInCapitalJson=${
+      json.paidInCapitalJson
+    }&establishDateJson=${json.establishDateJson}&chainName=${
+      json.chainName
+    }&keyword=${json.keyword}&page=${json.page}&pageSize=${json.pageSize}`,
+    method: "get"
+  });
+}
+// 基金公司投资图谱
+export function getCbcPedigree(json) {
+  return request({
+    url: `/cbc/pedigree?companyId=${json.id}`,
+    method: "get"
+  });
+}
+// 产业基金投资的公司列表
+export function getCbcCompany(json) {
+  return request({
+    url: `/cbc/company?companyId=${json.id}&page=${json.page}&pageSize=${
+      json.pageSize
+    }&orderField=${json.orderField}&order=${json.order}`,
+    method: "get"
+  });
+}
+// 产业基金匹配投资分布图
+export function getCbcBaseStatics(json) {
+  return request({
+    url: `/cbc/baseStatics?chainId=${json.chainId}`,
+    method: "get"
+  });
+}
+
+// 产业基金匹配投资分布图
+export function getCbcProfile(json) {
+  return request({
+    url: `/cbc/profile?chainId=${json.chainId}&profileKeepNum=${
+      json.profileKeepNum
+    }`,
+    method: "get"
+  });
+}
+// 产业基金匹配对应基金公司基本信息列表
+export function getCbcChain(json) {
+  return request({
+    url: `/cbc/cbcChain?chainId=${json.chainId}&page=${json.page}&pageSize=${
+      json.pageSize
+    }`,
+    method: "get"
+  });
+}
+// 公司简介
+export function getCompanyInfo(json) {
+  return request({
+    url: `/company/park/companyInfo?companyId=${json.companyId}`,
+    method: "get"
+  });
+}

@@ -201,8 +201,8 @@ export default {
         getParkCompanyList(_opt)
           .then(res => {
             if (res.code === 200) {
-              this.tableData = res.data.companyParkList;
-              this.enterNum = res.data.parkCompanyStatic.otherCount;
+              this.tableData = res.data.companyViewList;
+              this.enterNum = res.data.size;
             } else {
               this.tableData = [];
               this.enterNum = 0;

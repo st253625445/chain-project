@@ -201,7 +201,9 @@ export default {
         .then(() => {
           this.$router.push({ path: "/" });
         })
-        .catch(() => {});
+        .catch(rej => {
+          this.$message.error(rej);
+        });
       this.inSubmit = false;
     },
     async getAuthCode() {

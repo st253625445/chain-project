@@ -1,7 +1,6 @@
 <template>
   <div class="fundAllPage">
-    <h1>暂未开发，敬请期待！</h1>
-    <!-- <div class="seach-header">
+    <div class="seach-header">
       <span
         class="dropdown-link"
         @click="dropdownShow = !dropdownShow"
@@ -10,7 +9,7 @@
         {{ locationVal }}
         <i class="el-icon-arrow-down el-icon--right"></i>
         <i class="borderMask" v-if="dropdownShow"></i>
-        <transition name="dropdown">
+        <transition name="el-zoom-in-top">
           <div class="dropdownBox" v-if="dropdownShow" @click.stop>
             <ul>
               <li v-for="(item, key, index) of locationData" :key="index">
@@ -27,39 +26,111 @@
           </div>
         </transition>
       </span>
+      <el-dropdown
+        trigger="click"
+        @command="registeredCommand"
+        placement="bottom-start"
+        class="fundDropdownTop"
+      >
+        <span class="el-dropdown-link">
+          注册资本<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown" class="fundDropdown">
+          <el-dropdown-item
+            v-for="(item, index) in capitalLists"
+            :key="index"
+            :command="index"
+            :class="{ active: index === registeredIndex }"
+            >{{ item.name }}</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-dropdown
+        trigger="click"
+        @command="paidCommand"
+        placement="bottom-start"
+        class="fundDropdownTop"
+      >
+        <span class="el-dropdown-link">
+          实缴资本<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown" class="fundDropdown">
+          <el-dropdown-item
+            v-for="(item, index) in capitalLists"
+            :key="index"
+            :command="index"
+            :class="{ active: index === paidIndex }"
+            >{{ item.name }}</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-dropdown
+        trigger="click"
+        @command="yearLimitCommand"
+        placement="bottom-start"
+        class="fundDropdownTop"
+        style="marginRight: auto;"
+      >
+        <span class="el-dropdown-link">
+          成立年限<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown" class="fundDropdown">
+          <el-dropdown-item
+            v-for="(item, index) in yearLimitLists"
+            :key="index"
+            :command="index"
+            :class="{ active: index === yearLimitIndex }"
+            >{{ item.name }}</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </el-dropdown>
       <el-input
         placeholder="协会名称关键字"
-        v-model="fundAllNameQ"
+        v-model="params.keyword"
         class="fundAllNameSearch"
       >
-        <el-button slot="append">搜索</el-button>
+        <el-button slot="append" @click="searchIconClick">搜索</el-button>
       </el-input>
     </div>
     <div class="fundAllTagsBox">
       <div class="tagsUl">
         <ul>
-          <li class="active"><span>全部</span></li>
-          <li v-for="(item, index) in locationList" :key="index">
-            <span>{{ item }}</span>
+          <li :class="{ active: !baseIndex }">
+            <span @click="baseItemClick()">全部</span>
+          </li>
+          <li
+            v-for="(item, index) in locationList"
+            :key="index"
+            :class="{ active: baseIndex && baseIndex === index + 1 }"
+          >
+            <span @click="baseItemClick(index + 1)">{{ item }}</span>
           </li>
         </ul>
         <p class="title">地区</p>
       </div>
       <div class="tagsUl">
         <ul>
-          <li class="active"><span>全部</span></li>
-          <li v-for="(item, index) in industryList" :key="index">
-            <span>{{ item }}</span>
+          <li :class="{ active: !chainNameIndex }">
+            <span @click="chainNameItemClick()">全部</span>
+          </li>
+          <li
+            v-for="(item, index) in industryList"
+            :key="index"
+            :class="{ active: chainNameIndex && chainNameIndex === index + 1 }"
+          >
+            <span @click="chainNameItemClick(index + 1)">{{ item }}</span>
           </li>
         </ul>
         <p class="title">产业</p>
       </div>
     </div>
-    <div class="itemBox fundAllList">
+    <div class="itemBox fundAllList" v-loading="tableLoading">
       <p class="title">
         <span class="subTitle"
-          >北京区域共计5支产业基金，投资实体
-          <span class="blueSpan">10000</span> 家</span
+          >{{ locationVal }}{{ params.district }}区域共计
+          <span class="blueSpan">{{ tabelTotal.ownerCount }}</span>
+          支产业基金，投资实体
+          <span class="blueSpan">{{ tabelTotal.targetCount }}</span> 家</span
         >
       </p>
       <div class="tableBox">
@@ -78,21 +149,27 @@
           >
           </el-table-column>
           <el-table-column type="index" label="序号"> </el-table-column>
-          <el-table-column label="产业基金名称">
+          <el-table-column
+            label="产业基金名称"
+            class-name="tableTextLeft"
+            label-class-name="tableTextLeft"
+          >
             <template slot-scope="scope">
               <span @click="openInfoBox(scope.row)" class="pointerHover">{{
-                scope.row.data1
+                scope.row.name
               }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="data2" label="注册资本（万元）">
+          <el-table-column prop="regCapital" label="注册资本（万元）">
           </el-table-column>
-          <el-table-column prop="data3" label="币种"> </el-table-column>
-          <el-table-column prop="data3" label="成立时间"> </el-table-column>
-          <el-table-column prop="data3" label="投资实体总数"> </el-table-column>
-          <el-table-column prop="data3" label="直接投资实体企业数">
+          <el-table-column prop="currency" label="币种"> </el-table-column>
+          <el-table-column prop="establishDate" label="成立时间">
           </el-table-column>
-          <el-table-column prop="data3" label="间接投资实体企业">
+          <el-table-column prop="totalInvestCount" label="投资实体总数">
+          </el-table-column>
+          <el-table-column prop="directInvestCount" label="直接投资实体企业数">
+          </el-table-column>
+          <el-table-column prop="indirectInvestCount" label="间接投资实体企业">
           </el-table-column>
           <el-table-column label="投资谱系">
             <template slot-scope="scope">
@@ -108,9 +185,10 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :page-sizes="[5, 10, 20]"
-          :page-size="100"
+          :page-size="params.pageSize"
           layout="prev, pager, next, sizes, jumper"
-          :total="400"
+          :total="tabelTotal.ownerCount"
+          :current-page="params.page"
         >
         </el-pagination>
       </div>
@@ -120,115 +198,37 @@
       v-if="infoBoxShow"
       v-clickoutside="closeInfoBox"
     >
-      <div class="title">张江高科技园区</div>
-      <div class="infoCount">
-        <div>
-          <p>
-            截止2012年底，园区累计注册企业9164家；从业人员27万，本科学历以上占比超过60%。实现经营总收入4200亿元，同比增长13.5%；工业总产值2084亿元，同比增长19.75%；固定资产投资206亿元，同比增长1.93%；税收收入189.15亿元，同比增长10.6%。成为浦东发展的重要增长极。根据“2012年上海市开发区综合评价”，张江高科技园区再度蝉联综合排名第一，同时在创新发展和投资环境指标上也排名第一。
-          </p>
-          <p>
-            经过20年的开发，园区构筑了生物医药创新链和集成电路产业链的框架。目前，园区建有国家上海生物医药科技产业基地、国家信息产业基地、国家集成电路产业基地、
-          </p>
-          <p>
-            国家半导体照明产业基地、国家863信息安全成果产业化（东部）基地、国家软件产业基地、国家软件出口基地、国家文化产业示范基地、国家网游动漫产业发展基地等多个国家级基地。在科技创新方面，园区拥有多模式、多类型的孵化器，建有国家火炬创业园、国家留学人员创业园，一批新经济企业实现了大踏步的飞跃。“自我设计、自主经营、自由竞争”和“鼓励成功、宽容失败”的园区文化和创业氛围正逐渐形成。
-          </p>
+      <div class="title">{{ infoBoxData.title }}</div>
+      <div class="infoCount" v-loading="infoLoading">
+        <div v-if="infoBoxData.data">
+          <p v-html="infoBoxData.data"></p>
+        </div>
+        <div class="noInfo" v-if="!infoLoading && !infoBoxData.data">
+          无数据
         </div>
       </div>
       <div class="submit" @click="closeInfoBox">确 定</div>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
 import Clickoutside from "element-ui/src/utils/clickoutside";
+import { getCbcBaseInfo, getCbcSearch, getCompanyInfo } from "@/api/getData";
+import { parseTime } from "@/utils";
 export default {
   data() {
     return {
       locationVal: "全国",
       dropdownShow: false,
       infoBoxShow: false,
-      fundAllNameQ: "",
-      locationList: [
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区",
-        "东城区",
-        "西城区",
-        "朝阳区"
-      ],
-      industryList: [
-        "快递",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备",
-        "纺织",
-        "家用电器",
-        "电子元件",
-        "集成电路研发设备"
-      ],
-      tableData: [
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          data1: "xxx产业链",
-          data2: "20",
-          data3: "40"
-        }
-      ],
+      baseDistricts: {},
+      baseIndex: null,
+      locationList: [],
+      chainNameIndex: null,
+      industryList: [],
+      tableData: [],
+      tabelTotal: {},
+      tableLoading: true,
       locationData: {
         全国: ["全国", "京津冀"],
         直辖市: ["北京", "上海", "天津", "重庆"],
@@ -239,19 +239,238 @@ export default {
         西南: ["四川", "贵州", "云南", "西藏"],
         西北: ["陕西", "甘肃", "宁夏", "新疆", "青海"],
         东北: ["黑龙江", "吉林", "辽宁"]
-      }
+      },
+      capitalLists: [
+        {
+          name: "0-100万",
+          start: "0",
+          end: "100"
+        },
+        {
+          name: "100万-1000万",
+          start: "100",
+          end: "1000"
+        },
+        {
+          name: "1000万-3000万",
+          start: "1000",
+          end: "3000"
+        },
+        {
+          name: "3000万-1亿",
+          start: "3000",
+          end: "10000"
+        },
+        {
+          name: "1亿-5亿",
+          start: "10000",
+          end: "50000"
+        },
+        {
+          name: "5亿+",
+          start: "50000",
+          end: null
+        }
+      ],
+      yearLimitLists: [
+        {
+          name: "0-1年",
+          start: 1,
+          end: 0
+        },
+        {
+          name: "1-3年",
+          start: 3,
+          end: 1
+        },
+        {
+          name: "3-5年",
+          start: 5,
+          end: 3
+        },
+        {
+          name: "5-10年",
+          start: 10,
+          end: 5
+        },
+        {
+          name: "10年+",
+          start: null,
+          end: 10
+        }
+      ],
+      registeredIndex: null, // 注册资本选中下标
+      paidIndex: null, // 实缴资本选中下标
+      yearLimitIndex: null, // 成立年限选中下标
+      params: {
+        base: "", // 省份
+        keyword: "", // 搜索关键词
+        chainName: "", // 热门产业词
+        district: "", // 地区参数
+        regCapitalJson: {},
+        paidInCapitalJson: {},
+        establishDateJson: {},
+        page: 1,
+        pageSize: 5
+      },
+      infoBoxData: {},
+      infoLoading: true
     };
   },
   directives: { Clickoutside },
+  mounted() {
+    let query = this.$route.query;
+    if (query.fundQuery) {
+      this.params.keyword = query.fundQuery;
+    }
+    this.getBaseInfo();
+    this.getList();
+  },
   methods: {
-    // 下拉外部点击隐藏下拉
+    // 获取行政区划/热门行业标签
+    getBaseInfo() {
+      getCbcBaseInfo().then(res => {
+        if (res.code === 200) {
+          this.baseDistricts = res.data.baseDistricts;
+          this.industryList = res.data.chainNames;
+          this.locationList = this.baseDistricts["全国"];
+        }
+      });
+    },
+    // 请求产业基金列表
+    getList() {
+      let opt = {
+        ...this.params,
+        ...{
+          base: this.locationVal === "全国" ? "" : this.locationVal,
+          keyword:
+            this.params.keyword === this.params.chainName
+              ? ""
+              : this.params.keyword,
+          regCapitalJson: this.dropDownDataReturn(
+            this.capitalLists,
+            this.registeredIndex
+          ),
+          paidInCapitalJson: this.dropDownDataReturn(
+            this.capitalLists,
+            this.paidIndex
+          ),
+          establishDateJson: this.dropDownDataReturn(
+            this.yearLimitLists,
+            this.yearLimitIndex,
+            true
+          )
+        }
+      };
+      this.tableLoading = true;
+      getCbcSearch(opt)
+        .then(res => {
+          if (res.code === 200) {
+            this.tabelTotal = res.data.districtInvestStatics;
+            this.tableData = res.data.cbcCompanyViewList;
+            this.tableLoading = false;
+          } else {
+            this.tabelTotal = res.data.districtInvestStatics;
+            this.tableData = res.data.cbcCompanyViewList;
+            this.tableLoading = false;
+          }
+        })
+        .catch(rej => {
+          console.log(rej);
+          if (!rej.__CANCEL__) {
+            this.tabelTotal = {};
+            this.tableData = [];
+            this.tableLoading = false;
+          }
+        });
+    },
+    // 搜索按钮点击
+    searchIconClick() {
+      this.params.page = 1;
+      this.getList();
+    },
+    // 下拉数据处理
+    dropDownDataReturn(data, index, isyear) {
+      let _return = "";
+      if (index !== null) {
+        if (isyear) {
+          let _date = parseTime(new Date()).substr(0, 10);
+          _return = {
+            low:
+              data[index].start !== null &&
+              _date.substr(0, 4) - data[index].start + _date.substr(4),
+            high:
+              data[index].end !== null &&
+              _date.substr(0, 4) - data[index].end + _date.substr(4)
+          };
+        } else {
+          _return = {
+            low: data[index].start,
+            high: data[index].end
+          };
+        }
+      } else {
+        _return = {};
+      }
+      return encodeURIComponent(JSON.stringify(_return));
+    },
+    // 地区下拉外部点击隐藏下拉
     dropdownOutClick() {
       this.dropdownShow = false;
+    },
+    // 注册资本下拉
+    registeredCommand(command) {
+      this.registeredIndex = command;
+      this.params.page = 1;
+      this.getList();
+    },
+    // 实缴资本下拉
+    paidCommand(command) {
+      this.paidIndex = command;
+      this.params.page = 1;
+      this.getList();
+    },
+    // 成立年限下拉
+    yearLimitCommand(command) {
+      this.yearLimitIndex = command;
+      this.params.page = 1;
+      this.getList();
     },
     // 城市筛选点击
     locationDropdownItemClick(data) {
       this.locationVal = data;
+      this.locationList = this.baseDistricts[data];
+      this.baseIndex = null;
+      this.paramsDistrict = "";
       this.dropdownShow = false;
+      this.params.page = 1;
+      this.getList();
+    },
+    // 地区点击
+    baseItemClick(index) {
+      if (index) {
+        this.baseIndex = index;
+        this.params.district = this.locationList[index - 1];
+      } else {
+        this.baseIndex = null;
+        this.params.district = "";
+      }
+      this.params.page = 1;
+      this.getList();
+    },
+    // 热门产业点击
+    chainNameItemClick(index) {
+      if (index) {
+        this.chainNameIndex = index;
+        this.params.query = this.industryList[index - 1];
+        this.params.chainName = this.industryList[index - 1];
+      } else {
+        this.chainNameIndex = null;
+        this.params.query = "";
+        this.params.chainName = "";
+      }
+      this.params.page = 1;
+      this.getList();
     },
     // 勾选改变
     handleSelectionChange(val) {
@@ -263,15 +482,39 @@ export default {
     },
     // 页码每页条数改变
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.params.pageSize = val;
+      this.params.page = 1;
+      this.getList();
     },
     // 页码跳转
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.params.page = val;
+      this.getList();
     },
     // 显示园区信息
-    openInfoBox() {
+    openInfoBox(data) {
+      let id = data.id;
+      let opt = {
+        companyId: id
+      };
+      this.infoBoxData["title"] = data.name;
+      this.infoLoading = true;
       this.infoBoxShow = true;
+      getCompanyInfo(opt)
+        .then(res => {
+          if (res.code === 200) {
+            this.infoBoxData["data"] = res.data;
+            this.infoLoading = false;
+          } else {
+            this.infoBoxData["data"] = "";
+            this.infoLoading = false;
+          }
+        })
+        .catch(rej => {
+          console.log(rej);
+          this.infoBoxData["data"] = "";
+          this.infoLoading = false;
+        });
     },
     // 园区信息外部点击隐藏
     closeInfoBox() {
@@ -279,10 +522,9 @@ export default {
     },
     // 链接投资谱系
     linkFundChain(data) {
-      console.log(data);
       let _query = {
-        chainId: this.$route.query.chainId,
-        nodeName: this.$route.query.nodeName
+        companyId: data.id,
+        companyName: data.name
       };
       let routeData = this.$router.resolve({
         path: "/fundChain",
@@ -335,7 +577,7 @@ export default {
       padding: 10px 20px;
       border: 1px solid #4b61e7;
       background: #fff;
-      z-index: 2;
+      z-index: 2002;
       ul {
         width: 100%;
       }
@@ -367,6 +609,7 @@ export default {
     }
     .el-input__inner {
       height: 24px;
+      line-height: 24px;
       border-radius: 0;
     }
     .el-input-group__append {
@@ -429,11 +672,9 @@ export default {
       width: 100%;
       padding: 0 20px 20px;
     }
-    .el-table .cell {
-      text-align: center;
-    }
     .el-table td,
     .el-table th.is-leaf {
+      text-align: center;
       border-bottom: none;
     }
     .el-table th {
@@ -483,6 +724,10 @@ export default {
         padding-right: 20px;
         padding-bottom: 70px;
         overflow-y: scroll;
+      }
+      .noInfo {
+        text-align: center;
+        line-height: 270px;
       }
       p {
         padding: 5px 0;

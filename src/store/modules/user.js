@@ -19,15 +19,18 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo.from, userInfo.type)
           .then(response => {
-            const data = response.data;
-            console.log(data);
+            if (response.code === 200) {
+              const data = response.data;
+              setToken(data);
+              commit("SET_TOKEN", data);
+              resolve();
+            } else {
+              let msg = response.message;
+              reject(msg);
+            }
             // 无token 先记录username
-            setToken(data);
-            commit("SET_TOKEN", data);
-            resolve();
           })
           .catch(error => {
-            console.log(122);
             reject(error);
           });
       });
