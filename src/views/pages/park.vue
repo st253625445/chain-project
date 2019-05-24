@@ -294,8 +294,13 @@ export default {
     // 地区点击
     baseItemClick(index) {
       if (index) {
-        this.baseIndex = index;
-        this.paramsDistrict = this.locationList[index - 1];
+        if (index === this.baseIndex) {
+          this.baseIndex = null;
+          this.paramsDistrict = "";
+        } else {
+          this.baseIndex = index;
+          this.paramsDistrict = this.locationList[index - 1];
+        }
       } else {
         this.baseIndex = null;
         this.paramsDistrict = "";
@@ -306,9 +311,15 @@ export default {
     // 热门产业点击
     chainNameItemClick(index) {
       if (index) {
-        this.chainNameIndex = index;
-        this.paramsChainName = this.industryList[index - 1];
-        this.parkNameQ = this.industryList[index - 1];
+        if (index === this.chainNameIndex) {
+          this.chainNameIndex = null;
+          this.paramsChainName = "";
+          this.parkNameQ = "";
+        } else {
+          this.chainNameIndex = index;
+          this.paramsChainName = this.industryList[index - 1];
+          this.parkNameQ = this.industryList[index - 1];
+        }
       } else {
         this.chainNameIndex = null;
         this.paramsChainName = "";

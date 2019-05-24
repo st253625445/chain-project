@@ -86,7 +86,7 @@
       </el-dropdown>
       <el-input
         placeholder="协会名称关键字"
-        v-model="params.keyword"
+        v-model="params.query"
         class="fundAllNameSearch"
       >
         <el-button slot="append" @click="searchIconClick">搜索</el-button>
@@ -304,7 +304,7 @@ export default {
       yearLimitIndex: null, // 成立年限选中下标
       params: {
         base: "", // 省份
-        keyword: "", // 搜索关键词
+        query: "", // 搜索关键词
         chainName: "", // 热门产业词
         district: "", // 地区参数
         regCapitalJson: {},
@@ -321,7 +321,7 @@ export default {
   mounted() {
     let query = this.$route.query;
     if (query.fundQuery) {
-      this.params.keyword = query.fundQuery;
+      this.params.query = query.fundQuery;
     }
     this.getBaseInfo();
     this.getList();
@@ -344,9 +344,9 @@ export default {
         ...{
           base: this.locationVal === "全国" ? "" : this.locationVal,
           keyword:
-            this.params.keyword === this.params.chainName
+            this.params.query === this.params.chainName
               ? ""
-              : this.params.keyword,
+              : this.params.query,
           regCapitalJson: this.dropDownDataReturn(
             this.capitalLists,
             this.registeredIndex
@@ -449,8 +449,13 @@ export default {
     // 地区点击
     baseItemClick(index) {
       if (index) {
-        this.baseIndex = index;
-        this.params.district = this.locationList[index - 1];
+        if (index === this.baseIndex) {
+          this.baseIndex = null;
+          this.params.district = "";
+        } else {
+          this.baseIndex = index;
+          this.params.district = this.locationList[index - 1];
+        }
       } else {
         this.baseIndex = null;
         this.params.district = "";
@@ -461,9 +466,15 @@ export default {
     // 热门产业点击
     chainNameItemClick(index) {
       if (index) {
-        this.chainNameIndex = index;
-        this.params.query = this.industryList[index - 1];
-        this.params.chainName = this.industryList[index - 1];
+        if (index === this.chainNameIndex) {
+          this.chainNameIndex = null;
+          this.params.query = "";
+          this.params.chainName = "";
+        } else {
+          this.chainNameIndex = index;
+          this.params.query = this.industryList[index - 1];
+          this.params.chainName = this.industryList[index - 1];
+        }
       } else {
         this.chainNameIndex = null;
         this.params.query = "";

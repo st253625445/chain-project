@@ -3,7 +3,7 @@
  * @Author: shaotao
  * @Date: 2018-10-11 09:53:04
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-05-24 12:39:41
+ * @Last Modified time: 2019-05-24 18:44:52
  */
 
 import { Arrow } from "./arrow";
@@ -79,8 +79,9 @@ GraphItem.prototype.DrawProbeIcon = function(ctx) {
   DrawProbeIcon(ctx, _x, _y, _w, _h, 4 * this.scale, _color, "fill");
 };
 GraphItem.prototype.drawItem = function(ctx) {
+  let _borderColor = this.isClick || this.isHover ? "#5063df" : "#c2c2c2";
+  let _fontColor = this.isClick ? "#fff" : this.isHover ? "#5063df" : "#000";
   // 绘制圆角矩形
-  let _color = this.color;
   DrawRoundRect(
     ctx,
     this.x,
@@ -88,8 +89,8 @@ GraphItem.prototype.drawItem = function(ctx) {
     this.w,
     this.h,
     4 * this.scale,
-    _color,
-    "fill"
+    _borderColor,
+    "stroke"
   );
   // 绘制探索放大器图片
   this.canProbe && this.DrawProbeIcon(ctx);
@@ -99,7 +100,7 @@ GraphItem.prototype.drawItem = function(ctx) {
     this.x + 20 * this.scale,
     this.y + 29 * this.scale,
     this.text,
-    "#fff",
+    _fontColor,
     this.font,
     "left"
   );
@@ -109,7 +110,7 @@ GraphItem.prototype.drawItem = function(ctx) {
       this.x + 20 * this.scale,
       this.y + 52 * this.scale,
       this.subName1,
-      "#fff",
+      _fontColor,
       this.subFont,
       "left",
       19
@@ -121,7 +122,7 @@ GraphItem.prototype.drawItem = function(ctx) {
       this.x + 20 * this.scale,
       this.y + 77 * this.scale,
       this.subName2,
-      "#fff",
+      _fontColor,
       this.subFont,
       "left",
       19
