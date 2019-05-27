@@ -30,10 +30,15 @@
           >
           </el-table-column>
           <el-table-column
-            type="index"
+            width="60"
             label="序号"
             :show-overflow-tooltip="true"
           >
+            <template slot-scope="scope">
+              <span>
+                {{ scope.$index + (page - 1) * pageSize + 1 }}
+              </span>
+            </template>
           </el-table-column>
           <el-table-column
             label="企业名称"
