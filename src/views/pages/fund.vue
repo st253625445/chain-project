@@ -19,15 +19,6 @@
     <div class="itemBox fundListBox">
       <p class="title">
         产业基金基本信息
-        <!-- <span class="subTitle">
-          北京区域共计
-          <span class="blueSpan">5</span>
-          支产业基金，投资实体
-          <span class="blueSpan">
-            10000
-          </span>
-          家
-        </span> -->
       </p>
       <div class="tableBox">
         <el-table
@@ -43,13 +34,20 @@
             type="selection"
             width="85"
             label-class-name="selectLable"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
-          <el-table-column type="index" label="序号"> </el-table-column>
+          <el-table-column
+            type="index"
+            label="序号"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
           <el-table-column
             label="产业基金名称"
             class-name="tableTextLeft"
             label-class-name="tableTextLeft"
+            :show-overflow-tooltip="true"
           >
             <template slot-scope="scope">
               <span
@@ -59,18 +57,32 @@
               >
             </template>
           </el-table-column>
-          <el-table-column prop="regCapital" label="注册资本（万元）" />
-          <el-table-column prop="currency" label="币种" />
+          <el-table-column
+            prop="regCapital"
+            label="注册资本（万元）"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            prop="currency"
+            label="币种"
+            :show-overflow-tooltip="true"
+          />
           <el-table-column
             prop="directInvestCount"
             label="直接投资实体企业数"
+            :show-overflow-tooltip="true"
           />
           <el-table-column
             prop="indirectInvestCount"
             label="间接投资实体企业"
+            :show-overflow-tooltip="true"
           />
-          <el-table-column prop="establishDate" label="成立时间" />
-          <el-table-column label="投资谱系">
+          <el-table-column
+            prop="establishDate"
+            label="成立时间"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column label="投资谱系" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <span
                 @click="linkFundChain(scope.row)"

@@ -26,9 +26,15 @@
             type="selection"
             width="85"
             label-class-name="selectLable"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
-          <el-table-column type="index" label="序号"> </el-table-column>
+          <el-table-column
+            type="index"
+            label="序号"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
           <el-table-column
             label="企业名称"
             class-name="tableTextLeft"
@@ -56,16 +62,20 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="mainProducts" label="主要产品">
+          <el-table-column
+            prop="mainProducts"
+            label="主要产品"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column label="所在集团">
+          <el-table-column label="所在集团" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
                 >详情</span
               >
             </template>
           </el-table-column>
-          <el-table-column label="企业关联方">
+          <el-table-column label="企业关联方" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <span @click="clickFn(scope.row)" class="blueSpan pointerHover"
                 >详情</span
@@ -76,26 +86,49 @@
             prop="regLocation"
             label="注册省市"
             sortable="custom"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
-          <el-table-column prop="enterScale" label="企业规模" sortable="custom">
+          <el-table-column
+            prop="enterScale"
+            label="企业规模"
+            :show-overflow-tooltip="true"
+            sortable="custom"
+          >
           </el-table-column>
-          <el-table-column prop="lifeSpan" label="生存年限" sortable="custom">
+          <el-table-column
+            prop="lifeSpan"
+            label="生存年限"
+            :show-overflow-tooltip="true"
+            sortable="custom"
+          >
           </el-table-column>
-          <el-table-column prop="enterType" label="企业类型" sortable="custom">
+          <el-table-column
+            prop="enterType"
+            label="企业类型"
+            :show-overflow-tooltip="true"
+            sortable="custom"
+          >
           </el-table-column>
           <el-table-column
             prop="currency"
             label="注册资金币种"
             sortable="custom"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
-          <el-table-column prop="regCapital" label="注册资金" sortable="custom">
+          <el-table-column
+            prop="regCapital"
+            label="注册资金"
+            sortable="custom"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
           <el-table-column
             prop="establishTime"
             label="成立时间"
             sortable="custom"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
         </el-table>

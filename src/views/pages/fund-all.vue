@@ -85,7 +85,7 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-input
-        placeholder="协会名称关键字"
+        placeholder="产业基金名称关键字"
         v-model="params.query"
         class="fundAllNameSearch"
       >
@@ -146,13 +146,20 @@
             type="selection"
             width="85"
             label-class-name="selectLable"
+            :show-overflow-tooltip="true"
           >
           </el-table-column>
-          <el-table-column type="index" label="序号"> </el-table-column>
+          <el-table-column
+            type="index"
+            label="序号"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
           <el-table-column
             label="产业基金名称"
             class-name="tableTextLeft"
             label-class-name="tableTextLeft"
+            :show-overflow-tooltip="true"
           >
             <template slot-scope="scope">
               <span @click="openInfoBox(scope.row)" class="pointerHover">{{
@@ -160,18 +167,44 @@
               }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="regCapital" label="注册资本（万元）">
+          <el-table-column
+            prop="regCapital"
+            label="注册资本（万元）"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="currency" label="币种"> </el-table-column>
-          <el-table-column prop="establishDate" label="成立时间">
+          <el-table-column
+            prop="currency"
+            label="币种"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="totalInvestCount" label="投资实体总数">
+          <el-table-column
+            prop="establishDate"
+            label="成立时间"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="directInvestCount" label="直接投资实体企业数">
+          <el-table-column
+            prop="totalInvestCount"
+            label="投资实体总数"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column prop="indirectInvestCount" label="间接投资实体企业">
+          <el-table-column
+            prop="directInvestCount"
+            label="直接投资实体企业数"
+            :show-overflow-tooltip="true"
+          >
           </el-table-column>
-          <el-table-column label="投资谱系">
+          <el-table-column
+            prop="indirectInvestCount"
+            label="间接投资实体企业"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
+          <el-table-column label="投资谱系" :show-overflow-tooltip="true"
+            >>
             <template slot-scope="scope">
               <span
                 @click="linkFundChain(scope.row)"
@@ -420,19 +453,19 @@ export default {
     },
     // 注册资本下拉
     registeredCommand(command) {
-      this.registeredIndex = command;
+      this.registeredIndex = this.registeredIndex === command ? null : command;
       this.params.page = 1;
       this.getList();
     },
     // 实缴资本下拉
     paidCommand(command) {
-      this.paidIndex = command;
+      this.paidIndex = this.paidIndex === command ? null : command;
       this.params.page = 1;
       this.getList();
     },
     // 成立年限下拉
     yearLimitCommand(command) {
-      this.yearLimitIndex = command;
+      this.yearLimitIndex = this.yearLimitIndex === command ? null : command;
       this.params.page = 1;
       this.getList();
     },
