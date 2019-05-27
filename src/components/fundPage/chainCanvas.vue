@@ -124,8 +124,8 @@ export default {
       return data.map(item => {
         return {
           name: item.companyName,
-          subName1: `认缴金额:${item.amount}万`,
-          subName2: `持股比例:${item.percent * 100}%`
+          subName1: `认缴金额:${(item.amount - 0).toFixed(2)}万`,
+          subName2: `持股比例:${(item.percent * 100).toFixed(2)}%`
         };
       });
     },
