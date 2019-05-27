@@ -186,20 +186,8 @@
           >
           </el-table-column>
           <el-table-column
-            prop="totalInvestCount"
-            label="投资实体总数"
-            :show-overflow-tooltip="true"
-          >
-          </el-table-column>
-          <el-table-column
             prop="directInvestCount"
             label="直接投资实体企业数"
-            :show-overflow-tooltip="true"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="indirectInvestCount"
-            label="间接投资实体企业"
             :show-overflow-tooltip="true"
           >
           </el-table-column>
