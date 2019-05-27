@@ -73,11 +73,6 @@
             :show-overflow-tooltip="true"
           />
           <el-table-column
-            prop="indirectInvestCount"
-            label="间接投资实体企业"
-            :show-overflow-tooltip="true"
-          />
-          <el-table-column
             prop="establishDate"
             label="成立时间"
             :show-overflow-tooltip="true"
