@@ -156,7 +156,7 @@
           >
             <template slot-scope="scope">
               <span>
-                {{ scope.$index + (page - 1) * pageSize + 1 }}
+                {{ scope.$index + (params.page - 1) * params.pageSize + 1 }}
               </span>
             </template>
           </el-table-column>
