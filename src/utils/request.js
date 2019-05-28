@@ -15,7 +15,7 @@ let removePending = config => {
 };
 // 创建axios实例
 const service = axios.create({
-  timeout: 60000 // 请求超时时间
+  timeout: 120000 // 请求超时时间
 });
 
 service.defaults.baseURL = "/api";

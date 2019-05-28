@@ -87,8 +87,8 @@ export default {
           center: {
             name: this.centerName,
             typeName: {
-              up: "股东",
-              down: "投资"
+              up: "",
+              down: ""
             }
           },
           up: {
