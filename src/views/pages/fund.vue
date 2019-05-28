@@ -1,6 +1,6 @@
 <template>
   <div class="fundPage">
-    <div class="itemBox fundTotalBox">
+    <div class="itemBox fundTotalBox" v-loading="totalLoading">
       <p class="title">产业基金投资概况</p>
       <p class="fundTotal">
         该产业链下的产业基金共<span class="blueSpan">
@@ -140,7 +140,8 @@ export default {
       pageSize: 5,
       listTotal: 0,
       infoBoxData: {},
-      infoLoading: true
+      infoLoading: true,
+      totalLoading: true
     };
   },
   components: { fundMap },
@@ -182,10 +183,12 @@ export default {
           } else {
             this.baseStatics = {};
           }
+          this.totalLoading = false;
         })
         .catch(rej => {
           console.log(rej);
           this.baseStatics = {};
+          this.totalLoading = false;
         });
     },
     // 获取区域分布数据
@@ -198,11 +201,10 @@ export default {
         .then(res => {
           if (res.code === 200) {
             this.fundMapData = res.data;
-            this.fundMapLoading = false;
           } else {
             this.fundMapData = {};
-            this.fundMapLoading = false;
           }
+          this.fundMapLoading = false;
         })
         .catch(rej => {
           console.log(rej);
