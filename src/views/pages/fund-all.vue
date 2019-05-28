@@ -256,7 +256,7 @@ export default {
       tabelTotal: {},
       tableLoading: true,
       locationData: {
-        全国: ["全国", "京津冀"],
+        全国: ["全国"],
         直辖市: ["北京", "上海", "天津", "重庆"],
         华北: ["河北", "山西", "内蒙古"],
         华东: ["山东", "江苏", "安徽", "江西", "浙江", "福建", "台湾"],
@@ -423,11 +423,13 @@ export default {
           let _date = parseTime(new Date()).substr(0, 10);
           _return = {
             low:
-              data[index].start !== null &&
-              _date.substr(0, 4) - data[index].start + _date.substr(4),
+              data[index].start !== null
+                ? _date.substr(0, 4) - data[index].start + _date.substr(4)
+                : "",
             high:
-              data[index].end !== null &&
-              _date.substr(0, 4) - data[index].end + _date.substr(4)
+              data[index].end !== null
+                ? _date.substr(0, 4) - data[index].end + _date.substr(4)
+                : ""
           };
         } else {
           _return = {
