@@ -7,7 +7,7 @@
           {{ baseStatics.fundCompanyCount }} </span
         >家，投资总额共计<span class="blueSpan">
           {{ baseStatics.investAmount | investAmountFilter }} </span
-        >亿万元，共投资实体企业<span class="blueSpan">
+        >元，共投资实体企业<span class="blueSpan">
           {{ baseStatics.investedCompanyCount }} </span
         >家。
       </p>
@@ -158,7 +158,13 @@ export default {
   filters: {
     investAmountFilter(val) {
       if (val) {
-        return (val / 10000).toFixed(2);
+        if (val >= 100000000) {
+          return `${(val / 100000000).toFixed(2)}亿万`;
+        } else if (val >= 10000 && val < 100000000) {
+          return `${(val / 10000).toFixed(2)}亿`;
+        } else {
+          return `${val.toFixed(2)}万`;
+        }
       } else {
         return "";
       }
