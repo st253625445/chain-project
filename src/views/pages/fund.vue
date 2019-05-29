@@ -158,7 +158,7 @@ export default {
   filters: {
     investAmountFilter(val) {
       if (val) {
-        return (val / 100000000).toFixed(2);
+        return (val / 10000).toFixed(2);
       } else {
         return "";
       }
