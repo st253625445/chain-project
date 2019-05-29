@@ -124,7 +124,7 @@
           </el-table-column>
           <el-table-column
             prop="regCapital"
-            label="注册资金"
+            label="注册资金(万元)"
             sortable="custom"
             :show-overflow-tooltip="true"
           >
