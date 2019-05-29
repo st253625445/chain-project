@@ -566,7 +566,7 @@ export default {
         companyName: data.name
       };
       let routeData = this.$router.resolve({
-        path: "/fundChain",
+        path: "/fundAllChain",
         query: _query
       });
       window.open(routeData.href, "_blank");

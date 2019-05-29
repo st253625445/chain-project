@@ -87,6 +87,13 @@ export const constantRouterMap = [
         path: "fundChain",
         name: "fundChain",
         hidden: true,
+        meta: { title: "投资谱系", activePath: "fund" },
+        component: () => import("@/views/pages/fund-chain")
+      },
+      {
+        path: "fundAllChain",
+        name: "fundAllChain",
+        hidden: true,
         meta: { title: "投资谱系", activePath: "fundAll" },
         component: () => import("@/views/pages/fund-chain")
       },
