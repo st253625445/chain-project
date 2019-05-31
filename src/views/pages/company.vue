@@ -1,7 +1,6 @@
 <template>
   <div class="companyPage">
-    <h1>暂未开发，敬请期待！</h1>
-    <!-- <div class="companyTopInfo">
+    <div class="companyTopInfo">
       <div class="title">{{ companyName }}--企业画像</div>
       <ul class="topInfoBox">
         <li><span>再营（开业）企业</span><span>所属产业链：银行</span></li>
@@ -242,7 +241,7 @@
         </li>
       </ul>
     </div>
-    <i class="toTopButton el-icon-arrow-up" @click="toUpScroll"></i> -->
+    <i class="toTopButton el-icon-arrow-up" @click="toUpScroll"></i>
   </div>
 </template>
 <script>
@@ -501,7 +500,7 @@ export default {
   }
   .tabNav {
     width: 100%;
-    padding: 10px;
+    padding: 20px;
     ul {
       display: flex;
       width: 100%;
@@ -527,8 +526,7 @@ export default {
   .countBox {
     width: 100%;
     height: calc(100vh - 300px);
-    padding: 0 10px;
-    padding-right: 110px;
+    padding: 0 120px 30px 20px;
     overflow: scroll;
     .companyItemBox {
       width: 100%;
@@ -593,8 +591,8 @@ export default {
   .sideNav {
     position: absolute;
     width: 90px;
-    right: 16px;
-    top: 235px;
+    right: 26px;
+    top: 255px;
     padding: 20px 0;
     background: #fff;
     ul {
