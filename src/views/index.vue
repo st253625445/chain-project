@@ -396,7 +396,10 @@ export default {
     companyItemClick(data) {
       let routeData = this.$router.resolve({
         path: "/company",
-        query: { companyId: data.companyId }
+        query: {
+          companyId: data.companyId,
+          companyName: data.companyName
+        }
       });
       window.open(routeData.href, "_blank");
     },

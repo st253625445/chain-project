@@ -294,3 +294,67 @@ export function getCompanyInfo(json) {
     method: "get"
   });
 }
+// v2.04相关api
+// 上市公司基本画像信息
+export function getCompanyPortrait(json) {
+  return request({
+    url: `/listedCompany/portrait?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司基本信息
+export function getCompanyBasicInfo(json) {
+  return request({
+    url: `/listedCompany/basicInfo?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司核心人物信息
+export function getCompanyKeyPerson(json) {
+  return request({
+    url: `/listedCompany/keyPerson?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司联系方式
+export function getCompanyContact(json) {
+  return request({
+    url: `/listedCompany/contact?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司股票信息
+export function getCompanyStockInfo(json) {
+  return request({
+    url: `/listedCompany/stockInfo?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司十大股东
+export function getCompanyTenShareHolder(json) {
+  return request({
+    url: `/listedCompany/tenShareHolder?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司高管信息
+export function getCompanyExecutives(json) {
+  return request({
+    url: `/listedCompany/executives?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司股本结构信息
+export function getCompanyEquity(json) {
+  return request({
+    url: `/listedCompany/equity?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 上市公司核心题材信息
+export function getCompanyCoreTopics(json) {
+  return request({
+    url: `/listedCompany/coreTopics?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
