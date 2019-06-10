@@ -47,9 +47,11 @@
             :show-overflow-tooltip="true"
           >
             <template slot-scope="scope">
-              <span @click="clickFn(scope.row)" class="pointerHover">{{
-                scope.row.enterName
-              }}</span>
+              <span
+                @click="linkCompany(scope.row)"
+                class="blueSpan pointerHover"
+                >{{ scope.row.enterName }}</span
+              >
             </template>
           </el-table-column>
           <el-table-column
@@ -280,6 +282,18 @@ export default {
       console.log(`当前页: ${val}`);
       this.page = val;
       this.getCbcCompanyList();
+    },
+    // 链接公司信息
+    linkCompany(data) {
+      let _query = {
+        companyId: data.id,
+        companyName: data.enterName
+      };
+      let routeData = this.$router.resolve({
+        path: "/company",
+        query: _query
+      });
+      window.open(routeData.href, "_blank");
     }
   }
 };
