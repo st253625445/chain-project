@@ -100,7 +100,7 @@ export default {
           disable: false
         },
         {
-          text: "经验风险",
+          text: "经营风险",
           disable: false
         },
         {
