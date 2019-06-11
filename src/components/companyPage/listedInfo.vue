@@ -61,21 +61,21 @@
       <div class="companyItemBox">
         <div class="title">证券信息</div>
         <el-row>
-          <el-col :span="12">A股代码：{{ stockInfo.aCode | isNoData }}</el-col>
+          <el-col :span="12">A股代码：{{ stockInfo.codeA | isNoData }}</el-col>
           <el-col :span="12"
-            >A股简称：{{ stockInfo.aCodeAbbrName | isNoData }}</el-col
+            >A股简称：{{ stockInfo.abbrNameOfA | isNoData }}</el-col
           >
         </el-row>
         <el-row>
-          <el-col :span="12">B股代码：{{ stockInfo.bCode | isNoData }}</el-col>
+          <el-col :span="12">B股代码：{{ stockInfo.codeB | isNoData }}</el-col>
           <el-col :span="12"
-            >B股简称：{{ stockInfo.bCodeAbbrName | isNoData }}</el-col
+            >B股简称：{{ stockInfo.abbrNameOfB | isNoData }}</el-col
           >
         </el-row>
         <el-row>
-          <el-col :span="12">H股代码：{{ stockInfo.hCode | isNoData }}</el-col>
+          <el-col :span="12">H股代码：{{ stockInfo.codeH | isNoData }}</el-col>
           <el-col :span="12"
-            >H股简称：{{ stockInfo.hCodeAbbrName | isNoData }}</el-col
+            >H股简称：{{ stockInfo.abbrNameOfH | isNoData }}</el-col
           >
         </el-row>
         <el-row>
@@ -215,13 +215,17 @@
           </el-table-column>
           <el-table-column label="变动比例" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <template v-if="scope.row.addOrReduce > 0">
+              <template
+                v-if="scope.row.addOrReduce > 0 && scope.row.changeRatio"
+              >
                 <span class="icon-up" />
                 <span class="red">
                   {{ scope.row.changeRatio | percentageChange }}</span
                 >
               </template>
-              <template v-else-if="scope.row.addOrReduce < 0">
+              <template
+                v-else-if="scope.row.addOrReduce < 0 && scope.row.changeRatio"
+              >
                 <span class="icon-down" />
                 <span class="green">
                   {{ scope.row.changeRatio | percentageChange }}</span

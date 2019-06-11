@@ -38,8 +38,7 @@ export default {
           if (val >= 0) {
             return `+${val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
           } else {
-            val = val.toString().Substring(1);
-            return `-${val.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            return `${val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
           }
         }
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
