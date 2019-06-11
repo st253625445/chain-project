@@ -215,13 +215,17 @@
           </el-table-column>
           <el-table-column label="变动比例" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <template v-if="scope.row.addOrReduce > 0">
+              <template
+                v-if="scope.row.addOrReduce > 0 && scope.row.changeRatio"
+              >
                 <span class="icon-up" />
                 <span class="red">
                   {{ scope.row.changeRatio | percentageChange }}</span
                 >
               </template>
-              <template v-else-if="scope.row.addOrReduce < 0">
+              <template
+                v-else-if="scope.row.addOrReduce < 0 && scope.row.changeRatio"
+              >
                 <span class="icon-down" />
                 <span class="green">
                   {{ scope.row.changeRatio | percentageChange }}</span

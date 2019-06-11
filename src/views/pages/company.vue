@@ -32,7 +32,12 @@
           <span></span>
         </li>
         <li>
-          <span>法人代表：{{ portraitData.legalPerson.name | isNoData }}</span>
+          <span
+            >法人代表：{{
+              portraitData.legalPerson &&
+                portraitData.legalPerson.name | isNoData
+            }}</span
+          >
           <span>所属集团：{{ portraitData.group | isNoData }}</span>
         </li>
         <li>
@@ -52,13 +57,22 @@
           :key="index"
           :class="{ active: index === tabIndexVal }"
           @click="tabChange(index)"
+          v-show="!item.disable"
         >
-          {{ item }}
+          {{ item.text }}
         </li>
       </ul>
     </div>
-    <ListedInfo :companyId="companyId" v-if="tabIndexVal === 0" />
-    <CompanyInfo :companyId="companyId" v-if="tabIndexVal === 1" />
+    <template v-if="!companyLoading">
+      <ListedInfo
+        :companyId="companyId"
+        v-if="!tabData[0].disable && tabIndexVal === 0"
+      />
+      <CompanyInfo
+        :companyId="companyId"
+        v-if="!tabData[1].disable && tabIndexVal === 1"
+      />
+    </template>
   </div>
 </template>
 <script>
@@ -73,14 +87,38 @@ export default {
       companyId: "",
       companyName: "",
       tabData: [
-        "上市信息",
-        "基本情况",
-        "司法风险",
-        "经验风险",
-        "财务状况",
-        "发展状况",
-        "资产状况",
-        "经营状况"
+        {
+          text: "上市信息",
+          disable: false
+        },
+        {
+          text: "基本情况",
+          disable: false
+        },
+        {
+          text: "司法风险",
+          disable: false
+        },
+        {
+          text: "经验风险",
+          disable: false
+        },
+        {
+          text: "财务状况",
+          disable: false
+        },
+        {
+          text: "发展状况",
+          disable: false
+        },
+        {
+          text: "资产状况",
+          disable: false
+        },
+        {
+          text: "经营状况",
+          disable: false
+        }
       ],
       tabIndexVal: 0,
       portraitData: {
@@ -103,6 +141,10 @@ export default {
       .then(res => {
         if (res.code === 200) {
           this.portraitData = res.data;
+          if (res.data.companyCategory !== 1) {
+            this.tabData[0].disable = true;
+            this.tabIndexVal = 1;
+          }
         }
         this.companyLoading = false;
       })
@@ -133,7 +175,7 @@ export default {
     // tab切换
     tabChange(index) {
       console.log(index);
-      // this.tabIndexVal = index;
+      this.tabIndexVal = index;
     }
   }
 };
