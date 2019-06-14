@@ -1,6 +1,6 @@
 <template>
   <div class="indexPage">
-    <div class="chainTotalBox">
+    <!-- <div class="chainTotalBox">
       <span
         v-for="(item, index) in chainTotalDatas"
         :key="index"
@@ -8,11 +8,11 @@
       >
         {{ item.name }} {{ item.data }}
       </span>
-    </div>
+    </div> -->
     <div class="chainBox">
-      <chain-pane />
+      <chain-pane @returnProbeName="returnProbeName" />
     </div>
-    <div class="chainList">
+    <div class="itemBox chainList" v-loading="tableLoading">
       <p class="title">产业链成员分类统计</p>
       <el-table
         ref="multipleTable"
@@ -27,37 +27,65 @@
           type="selection"
           width="100"
           label-class-name="selectLable"
+          :show-overflow-tooltip="true"
         >
         </el-table-column>
-        <el-table-column label="产业链板块">
+        <el-table-column
+          label="产业链板块"
+          class-name="tableTextLeft"
+          label-class-name="tableTextLeft"
+          :show-overflow-tooltip="true"
+        >
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.nodeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="hy" label="行业"></el-table-column>
         <el-table-column
-          prop="data1"
+          label="行业"
+          class-name="tableTextLeft"
+          label-class-name="tableTextLeft"
+          :show-overflow-tooltip="true"
+        >
+          <template slot-scope="scope">
+            <span v-for="(item, index) in scope.row.allIndustry" :key="index">
+              {{ item }}
+              <span v-if="index < scope.row.allIndustry.length - 1">,</span>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="stockCount"
           label="龙头企业"
-          sortable
+          :show-overflow-tooltip="true"
+          sortable="custom"
         ></el-table-column>
         <el-table-column
-          prop="data2"
+          prop="longtouCount"
           label="核心企业"
-          sortable
+          :show-overflow-tooltip="true"
+          sortable="custom"
         ></el-table-column>
         <el-table-column
-          prop="data3"
+          prop="xinxiuCount"
           label="普通企业"
-          sortable
+          :show-overflow-tooltip="true"
+          sortable="custom"
         ></el-table-column>
+        <!-- <el-table-column
+          prop="xinxiuCount"
+          label="总企业数"
+          :show-overflow-tooltip="true"
+          sortable="custom"
+        ></el-table-column> -->
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :page-sizes="[5, 10, 20]"
-        :page-size="100"
+        :page-size="params.pageNum"
         layout="prev, pager, next, sizes, jumper"
-        :total="400"
+        :total="listTotal"
+        :current-page="params.page"
       >
       </el-pagination>
     </div>
@@ -66,7 +94,7 @@
 
 <script>
 import chainPane from "@/components/indexPage/chainCanvas";
-import { chainCategories } from "@/api/getData";
+import { getPdeigreeStatics, getNodeStatics } from "@/api/getData";
 export default {
   data() {
     return {
@@ -97,50 +125,17 @@ export default {
         }
       ],
       multipleSelection: [],
-      tableData: [
-        {
-          name: "xxx产业链",
-          hy: "xxx行业",
-          data1: "10",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          name: "xxx产业链",
-          hy: "xxx行业",
-          data1: "10",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          name: "xxx产业链",
-          hy: "xxx行业",
-          data1: "10",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          name: "xxx产业链",
-          hy: "xxx行业",
-          data1: "10",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          name: "xxx产业链",
-          hy: "xxx行业",
-          data1: "10",
-          data2: "20",
-          data3: "40"
-        },
-        {
-          name: "xxx产业链",
-          hy: "xxx行业",
-          data1: "10",
-          data2: "20",
-          data3: "40"
-        }
-      ]
+      tableData: [],
+      params: {
+        chainId: "",
+        page: 1,
+        pageNum: 5,
+        fieldOrder: 0,
+        order: 0
+      },
+      listTotal: 0,
+      tableLoading: true,
+      isByNodeName: false // 表格是否是通过节点请求
     };
   },
   components: { chainPane },
@@ -152,27 +147,93 @@ export default {
       this.$router.push("/");
     }
   },
-  mounted() {
-    chainCategories().then(res => {
-      console.log(res);
-    });
+  watch: {
+    $route: {
+      handler() {
+        let id = this.$route.query.chainId;
+        if (id) {
+          this.params = {
+            chainId: id,
+            page: 1,
+            pageNum: 5,
+            fieldOrder: 0,
+            order: 0
+          };
+          this.getListByChainId();
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
+    // 根据产业链获得相关的公司统计展示
+    getListByChainId() {
+      this.tableLoading = true;
+      this.isByNodeName = false;
+      getPdeigreeStatics(this.params)
+        .then(res => {
+          console.log(res);
+          if (res.code === 200) {
+            this.tableData = res.data.nodeRelatedCompanyStaticsFormatsList;
+            this.listTotal = res.data.totalCount;
+          }
+          this.tableLoading = false;
+        })
+        .catch(rej => {
+          console.log(rej);
+          this.tableLoading = false;
+          this.tableData = [];
+          this.listTotal = 0;
+        });
+    },
+    // 根据节点名称获得相关公司统计展示
+    getListByChainName(name) {
+      this.tableLoading = true;
+      this.isByNodeName = true;
+      getNodeStatics({ nodeName: name })
+        .then(res => {
+          console.log(res);
+          this.tableLoading = true;
+        })
+        .catch(rej => {
+          console.log(rej);
+          this.tableLoading = false;
+          this.tableData = [];
+        });
+    },
+    // 返回探索节点
+    returnProbeName(data) {
+      console.log(data);
+      this.getListByChainName(data);
+    },
     // 勾选改变
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    // 排序改变
-    sortChange(params) {
-      console.log(params);
-    },
     // 页码每页条数改变
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.params.pageNum = val;
+      this.params.page = 1;
+      this.isByNodeName ? this.getListByChainName() : this.getListByChainId();
     },
     // 页码跳转
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.params.page = val;
+      this.isByNodeName ? this.getListByChainName() : this.getListByChainId();
+    },
+    // 筛选
+    sortChange(params) {
+      console.log(params);
+      let list = ["stockCount", "longtouCount", "xinxiuCount"];
+      this.params.fieldOrder = list.indexOf(params.prop) + 1;
+      this.params.order = params.order
+        ? params.order === "ascending"
+          ? 1
+          : 2
+        : 0;
+      this.isByNodeName ? this.getListByChainName() : this.getListByChainId();
     }
   }
 };
@@ -216,11 +277,9 @@ export default {
       line-height: 60px;
       color: #1027ad;
     }
-    .el-table .cell {
-      text-align: center;
-    }
     .el-table td,
     .el-table th.is-leaf {
+      text-align: center;
       border-bottom: none;
     }
     .el-table th {

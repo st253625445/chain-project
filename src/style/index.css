@@ -263,6 +263,9 @@ div:focus {
   border: 1px solid #eeeeee;
   margin-bottom: 20px;
 }
+.itemBox .el-table {
+  min-height: 293px;
+}
 .itemBox > .title {
   text-indent: 20px;
   font-size: 16px;
