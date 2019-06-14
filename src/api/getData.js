@@ -358,3 +358,54 @@ export function getCompanyCoreTopics(json) {
     method: "get"
   });
 }
+// 根据产业链获得相关的公司统计展示
+export function getPdeigreeStatics(json) {
+  return request({
+    url: `/chain/pdeigreeStatics?chainId=${json.chainId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}&fieldOrder=${json.fieldOrder}&order=${
+      json.order
+    }`,
+    method: "get"
+  });
+}
+// 根据节点名称获得相关公司统计展示
+export function getNodeStatics(json) {
+  return request({
+    url: `/node?nodeName=${json.nodeName}`,
+    method: "get"
+  });
+}
+// 根据产业链获取相关的上市公司信息
+export function getListCompany(json) {
+  return request({
+    url: `/chain/listCompany?chainId=${json.chainId}&companyCategory=1&page=${
+      json.page
+    }&pageNum=${json.pageNum}&fieldOrder=${json.fieldOrder}&order=${
+      json.order
+    }`,
+    method: "get"
+  });
+}
+// 根据产业链获取相关的龙头公司信息
+export function getLongTouCompany(json) {
+  return request({
+    url: `/chain/longtouCompany?chainId=${
+      json.chainId
+    }&companyCategory=2&page=${json.page}&pageNum=${json.pageNum}&fieldOrder=${
+      json.fieldOrder
+    }&order=${json.order}`,
+    method: "get"
+  });
+}
+// 根据产业链获取相关的新秀公司信息
+export function getXinxiuCompany(json) {
+  return request({
+    url: `/chain/xinxiuCompany?chainId=${json.chainId}&companyCategory=3&page=${
+      json.page
+    }&pageNum=${json.pageNum}&fieldOrder=${json.fieldOrder}&order=${
+      json.order
+    }`,
+    method: "get"
+  });
+}

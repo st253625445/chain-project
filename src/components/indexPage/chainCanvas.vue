@@ -184,13 +184,12 @@ export default {
     },
     // 返回id 探查节点
     returnProbeItem(item) {
-      // 返回节点ID 请求相关公司信息
-      console.log(item);
       // 获取节点探查列表
       let _opt = {
         name: item.text,
         page: 1
       };
+      this.$emit("returnProbeName", item.text);
       this.getProbeUuid(_opt);
     },
     // 请求节点数据
