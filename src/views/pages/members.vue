@@ -270,7 +270,7 @@
         ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
-          label="注册资金"
+          label="注册资金(万)"
           sortable="custom"
           prop="regCapital"
         >
@@ -423,7 +423,7 @@
         ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
-          label="注册资金"
+          label="注册资金(万)"
           sortable="custom"
           prop="regCapital"
         >
