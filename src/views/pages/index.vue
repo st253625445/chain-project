@@ -71,12 +71,12 @@
           :show-overflow-tooltip="true"
           sortable="custom"
         ></el-table-column>
-        <!-- <el-table-column
-          prop="xinxiuCount"
+        <el-table-column
+          prop="totalCount"
           label="总企业数"
           :show-overflow-tooltip="true"
           sortable="custom"
-        ></el-table-column> -->
+        ></el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -135,6 +135,7 @@ export default {
       },
       listTotal: 0,
       tableLoading: true,
+      probeName: "", // 节点探索返回name
       isByNodeName: false // 表格是否是通过节点请求
     };
   },
@@ -187,13 +188,15 @@ export default {
         });
     },
     // 根据节点名称获得相关公司统计展示
-    getListByChainName(name) {
+    getListByChainName() {
       this.tableLoading = true;
       this.isByNodeName = true;
-      getNodeStatics({ nodeName: name })
+      getNodeStatics({ nodeName: this.probeName })
         .then(res => {
           console.log(res);
-          this.tableLoading = true;
+          this.tableData = [res.data];
+          this.listTotal = 1;
+          this.tableLoading = false;
         })
         .catch(rej => {
           console.log(rej);
@@ -204,7 +207,8 @@ export default {
     // 返回探索节点
     returnProbeName(data) {
       console.log(data);
-      this.getListByChainName(data);
+      this.probeName = data;
+      this.getListByChainName();
     },
     // 勾选改变
     handleSelectionChange(val) {
@@ -226,7 +230,7 @@ export default {
     // 筛选
     sortChange(params) {
       console.log(params);
-      let list = ["stockCount", "longtouCount", "xinxiuCount"];
+      let list = ["stockCount", "longtouCount", "xinxiuCount", "totalCount"];
       this.params.fieldOrder = list.indexOf(params.prop) + 1;
       this.params.order = params.order
         ? params.order === "ascending"
