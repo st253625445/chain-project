@@ -372,7 +372,7 @@ export function getPdeigreeStatics(json) {
 // 根据节点名称获得相关公司统计展示
 export function getNodeStatics(json) {
   return request({
-    url: `/node?nodeName=${json.nodeName}`,
+    url: `/node/pedigreeStatics?nodeName=${json.nodeName}`,
     method: "get"
   });
 }
