@@ -72,6 +72,10 @@
         :companyId="companyId"
         v-if="!tabData[1].disable && tabIndexVal === 1"
       />
+      <JudicialRisk
+        :companyId="companyId"
+        v-if="!tabData[1].disable && tabIndexVal === 2"
+      />
     </template>
   </div>
 </template>
@@ -79,6 +83,7 @@
 import { getCompanyPortrait } from "@/api/getData";
 import ListedInfo from "@/components/companyPage/listedInfo";
 import CompanyInfo from "@/components/companyPage/companyInfo";
+import JudicialRisk from "@/components/companyPage/judicialRisk";
 import mixin from "@/components/companyPage/mixin";
 export default {
   data() {
@@ -129,7 +134,8 @@ export default {
   mixins: [mixin],
   components: {
     ListedInfo,
-    CompanyInfo
+    CompanyInfo,
+    JudicialRisk
   },
   created() {
     let query = this.$route.query;
@@ -273,6 +279,14 @@ export default {
         font-size: 14px;
         color: #333333;
       }
+      .el-col {
+        text-indent: 0;
+        padding-left: 26px;
+        &.nopadding {
+          flex: 1;
+          padding-left: 0;
+        }
+      }
       .el-table {
         padding: 0 20px;
         .el-table_1_column_1 {
@@ -318,7 +332,6 @@ export default {
       > li {
         position: relative;
         width: 100%;
-        height: 35px;
         padding: 5px 10px;
         span {
           position: relative;
@@ -327,7 +340,7 @@ export default {
           font-size: 12px;
           line-height: 25px;
           color: #333333;
-          text-align: center;
+          text-align: left;
           cursor: default;
           &:hover {
             background: #eeeeee;
