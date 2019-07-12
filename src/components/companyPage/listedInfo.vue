@@ -2,7 +2,7 @@
   <div class="listedInfoBox" v-loading="listedLoading">
     <div class="countBox">
       <div class="companyItemBox">
-        <div class="title">股票详情</div>
+        <div class="title">{{ sideNavData[0] }}</div>
         <el-row>
           <el-col :span="6">股票代码：{{ stockInfo.code | isNoData }}</el-col>
           <el-col :span="6"
@@ -30,8 +30,8 @@
           <el-col :span="6"></el-col>
         </el-row>
       </div>
-      <div class="companyItemBox">
-        <div class="title">基本信息</div>
+      <div class="companyItemBotitlex">
+        <div class="title">{{ sideNavData[1] }}</div>
         <el-row>
           <el-col :span="12">公司全称：{{ basicInfo.name | isNoData }}</el-col>
           <el-col :span="12"
@@ -59,7 +59,7 @@
         </el-row>
       </div>
       <div class="companyItemBox">
-        <div class="title">证券信息</div>
+        <div class="title">{{ sideNavData[2] }}</div>
         <el-row>
           <el-col :span="12">A股代码：{{ stockInfo.codeA | isNoData }}</el-col>
           <el-col :span="12"
@@ -93,7 +93,7 @@
         </el-row>
       </div>
       <div class="companyItemBox">
-        <div class="title">重要人员</div>
+        <div class="title">{{ sideNavData[3] }}</div>
         <el-row>
           <el-col :span="12"
             >总 经 理：{{ keyPerson["总经理"] | textJoin }}</el-col
@@ -120,7 +120,7 @@
         </el-row>
       </div>
       <div class="companyItemBox">
-        <div class="title">联系信息</div>
+        <div class="title">{{ sideNavData[4] }}</div>
         <el-row>
           <el-col :span="12"
             >联系电话：{{ contactData.phoneNumber | isNoData }}</el-col
@@ -160,7 +160,7 @@
         </el-row>
       </div>
       <div class="companyItemBox">
-        <div class="title">十大股东</div>
+        <div class="title">{{ sideNavData[5] }}</div>
 
         <el-table
           :data="shareholderData"
@@ -239,7 +239,7 @@
         </el-table>
       </div>
       <div class="companyItemBox">
-        <div class="title">公司高管</div>
+        <div class="title">{{ sideNavData[6] }}</div>
         <el-table
           :data="ceoDataShow"
           stripe
@@ -312,7 +312,7 @@
         </el-pagination>
       </div>
       <div class="companyItemBox">
-        <div class="title">发行相关</div>
+        <div class="title">{{ sideNavData[7] }}</div>
         <el-row>
           <el-col :span="12"
             >成立日期：{{ stockInfo.establishDate | isNoData }}</el-col
@@ -367,7 +367,7 @@
         </el-row>
       </div>
       <div class="companyItemBox">
-        <div class="title">股本结构</div>
+        <div class="title">{{ sideNavData[8] }}</div>
 
         <el-table
           :data="capitalData"
@@ -391,7 +391,7 @@
         </el-table>
       </div>
       <div class="companyItemBox">
-        <div class="title">核心题材</div>
+        <div class="title">{{ sideNavData[9] }}</div>
         <p v-for="(item, index) in coreTopicsData" :key="index">
           <span>{{ item.topicTitle }}:</span><br />
           <span>{{ item.topicContent }}</span>
