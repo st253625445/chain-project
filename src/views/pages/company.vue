@@ -6,16 +6,16 @@
         <li>
           <span>{{ portraitData.regStatus | isNoData }}企业</span>
           <span>
-            所属产业链：--
-            <!-- <span
-              @click="linkToChain(portraitData.chainItemList)"
+            所属产业链:
+            <span
+              v-for="(item, index) in chainItems"
+              @click="linkToChain(item)"
               class="linkSpan"
+              :key="index"
             >
-              {{
-                portraitData.chainItemList &&
-                  portraitData.chainItemList[0].chainName | isNoData
-              }}
-            </span> -->
+              {{ item.chainName | isNoData }}
+              <span v-if="index < 4">,</span>
+            </span>
           </span>
         </li>
         <li>
@@ -131,6 +131,14 @@ export default {
     ListedInfo,
     CompanyInfo
   },
+  computed: {
+    chainItems: function() {
+      if (this.portraitData.chainItemList) {
+        return this.portraitData.chainItemList.slice(0, 5);
+      }
+      return [];
+    }
+  },
   created() {
     let query = this.$route.query;
     if (query.companyId && query.companyName) {
@@ -162,8 +170,8 @@ export default {
     linkToChain(data) {
       if (data) {
         let _query = {
-          chainId: data[0].chainId,
-          nodeName: data[0].chainName
+          chainId: data.chainId,
+          nodeName: data.chainName
         };
         let routeData = this.$router.resolve({
           path: "/index",
