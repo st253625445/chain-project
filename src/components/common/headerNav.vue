@@ -115,7 +115,7 @@ export default {
       Interval: null,
       msg: true,
       thisSearchQ: "",
-      groupIndex: 0,
+      groupIndex: null,
       hoverGroupIndex: 0,
       itemActiveIndex: 0,
       groupMenus: ["上市公司", "行业门类", "市场概念"],
@@ -136,6 +136,7 @@ export default {
     }
   },
   mounted() {
+    console.log("34234234");
     // style-icon 点击样式*/
     let icon = document.getElementsByClassName("iconAction");
     for (let i = 0; i < icon.length; i++) {
@@ -173,25 +174,11 @@ export default {
     },
     // 请求列表
     async searchChainList() {
-      let _res = await chainSearch(this.thisSearchQ);
-      this.menuDatas = this.setMenuNav(_res.data);
-      if (_res && _res.data.length !== 0) {
-        for (let i = 0; i < this.menuDatas.length; i++) {
-          if (this.menuDatas[i].items.length > 0) {
-            this.groupIndex = this.hoverGroupIndex = i;
-            break;
-          } else {
-            continue;
-          }
-        }
-        let _item = this.menuDatas[this.groupIndex].items[0];
-        if (_item.id === this.chainItemId) {
-          return false;
-        }
-        this.chainItemClick(_item, 0);
-      } else {
-        this.chainItemClick({ name: null, id: null }, -1);
-      }
+      chainSearch(this.thisSearchQ).then(res => {
+        this.groupIndex = null;
+        this.menuDatas = [];
+        this.menuDatas = this.setMenuNav(res.data);
+      });
     },
     // 处理列表数据返回nav
     setMenuNav(val) {
@@ -209,6 +196,10 @@ export default {
         if (_index < 3) {
           _data[_index].total += 1;
           _data[_index].items.push(item);
+          if (item.name === this.thisSearchQ && this.groupIndex === null) {
+            this.groupIndex = this.hoverGroupIndex = _index;
+            this.chainItemClick(item, _data[_index].total - 1);
+          }
         }
       });
       return _data;

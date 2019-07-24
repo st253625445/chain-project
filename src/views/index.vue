@@ -204,7 +204,10 @@
               <router-link
                 :to="{
                   path: '/company',
-                  query: { companyId: scope.row.companyId }
+                  query: {
+                    companyId: scope.row.companyId,
+                    companyName: scope.row.companyName
+                  }
                 }"
                 target="_blank"
               >

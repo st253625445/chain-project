@@ -53,24 +53,24 @@ export const constantRouterMap = [
         meta: { title: "企业画像", activePath: "members" },
         component: () => import("@/views/pages/company")
       },
-      {
-        path: "portrait",
-        name: "portrait",
-        meta: { title: "行业画像", activePath: "portrait" },
-        component: () => import("@/views/pages/portrait")
-      },
+      // {
+      //   path: "portrait",
+      //   name: "portrait",
+      //   meta: { title: "行业画像", activePath: "portrait" },
+      //   component: () => import("@/views/pages/portrait")
+      // },
       {
         path: "cloud",
         name: "cloud",
         meta: { title: "产业云图", activePath: "cloud" },
         component: () => import("@/views/pages/cloud")
       },
-      {
-        path: "scale",
-        name: "scale",
-        meta: { title: "产业规模", activePath: "scale" },
-        component: () => import("@/views/pages/scale")
-      },
+      // {
+      //   path: "scale",
+      //   name: "scale",
+      //   meta: { title: "产业规模", activePath: "scale" },
+      //   component: () => import("@/views/pages/scale")
+      // },
       {
         path: "fund",
         name: "fund",
@@ -97,12 +97,12 @@ export const constantRouterMap = [
         meta: { title: "投资谱系", activePath: "fundAll" },
         component: () => import("@/views/pages/fund-chain")
       },
-      {
-        path: "financing",
-        name: "financing",
-        meta: { title: "并购融资事件", activePath: "financing" },
-        component: () => import("@/views/pages/financing")
-      },
+      // {
+      //   path: "financing",
+      //   name: "financing",
+      //   meta: { title: "并购融资事件", activePath: "financing" },
+      //   component: () => import("@/views/pages/financing")
+      // },
       {
         path: "information",
         name: "information",

@@ -202,7 +202,7 @@ export default {
           .then(res => {
             if (res.code === 200) {
               this.tableData = res.data.companyViewList;
-              this.enterNum = res.data.size;
+              this.enterNum = res.data.parkCompanyStatic.otherCount;
             } else {
               this.tableData = [];
               this.enterNum = 0;
