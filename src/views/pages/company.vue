@@ -72,10 +72,7 @@
         :companyId="companyId"
         v-if="!tabData[1].disable && tabIndexVal === 1"
       />
-      <JudicialRisk
-        :companyId="companyId"
-        v-if="!tabData[1].disable && tabIndexVal === 2"
-      />
+      <JudicialRisk :companyId="companyId" v-if="1 === 2" />
     </template>
   </div>
 </template>
@@ -261,11 +258,12 @@ export default {
     .companyItemBox {
       width: 100%;
       background: #fff;
-      padding-bottom: 15px;
+      padding: 0 20px 15px;
       margin-bottom: 10px;
       .title {
         position: relative;
-        width: 100%;
+        width: calc(100% + 40px);
+        margin-left: -20px;
         height: 56px;
         text-indent: 26px;
         font-size: 16px;
@@ -286,6 +284,7 @@ export default {
         line-height: 30px;
         font-size: 14px;
         color: #333333;
+        padding-right: 26px;
       }
       .el-col {
         text-indent: 0;
@@ -296,7 +295,6 @@ export default {
         }
       }
       .el-table {
-        padding: 0 20px;
         .el-table_1_column_1 {
           text-align: center;
         }
@@ -321,7 +319,7 @@ export default {
       p {
         font-size: 14px;
         color: rgb(51, 51, 51);
-        padding: 10px 20px;
+        padding: 10px 0;
         text-align: justify;
       }
     }

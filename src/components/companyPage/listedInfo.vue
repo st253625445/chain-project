@@ -30,7 +30,7 @@
           <el-col :span="6"></el-col>
         </el-row>
       </div>
-      <div class="companyItemBotitlex">
+      <div class="companyItemBox">
         <div class="title">{{ sideNavData[1] }}</div>
         <el-row>
           <el-col :span="12">公司全称：{{ basicInfo.name | isNoData }}</el-col>
@@ -424,7 +424,6 @@ import {
   getCompanyEquity,
   getCompanyCoreTopics
 } from "@/api/getData";
-import { Promise } from "q";
 import mixin from "./mixin";
 export default {
   props: ["companyId"],

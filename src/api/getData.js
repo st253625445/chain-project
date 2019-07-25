@@ -409,3 +409,78 @@ export function getXinxiuCompany(json) {
     method: "get"
   });
 }
+// 公司的工商信息
+export function getBusinessInfo(json) {
+  return request({
+    url: `/fundatement/businessInfo?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 公司的重要人物
+export function getImportPerson(json) {
+  return request({
+    url: `/fundatement/importPerson?companyId=${json.companyId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}`,
+    method: "get"
+  });
+}
+// 公司的实际控股人
+export function getActControl(json) {
+  return request({
+    url: `/fundatement/actControl?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 公司的最终受益人
+export function getBenefit(json) {
+  return request({
+    url: `/fundatement/benefit?companyId=${json.companyId}`,
+    method: "get"
+  });
+}
+// 公司的股东
+export function getShareHolder(json) {
+  return request({
+    url: `/fundatement/shareHolder?companyId=${json.companyId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}`,
+    method: "get"
+  });
+}
+// 公司的对外投资记录
+export function getInverst(json) {
+  return request({
+    url: `/fundatement/inverst?companyId=${json.companyId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}`,
+    method: "get"
+  });
+}
+// 公司的对分支机构
+export function getBranch(json) {
+  return request({
+    url: `/fundatement/branch?companyId=${json.companyId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}`,
+    method: "get"
+  });
+}
+// 公司的控股企业
+export function getHoldEnter(json) {
+  return request({
+    url: `/fundatement/holdEnter?companyId=${json.companyId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}`,
+    method: "get"
+  });
+}
+// 公司的控股企业
+export function getChangeItem(json) {
+  return request({
+    url: `/fundatement/changeItem?companyId=${json.companyId}&page=${
+      json.page
+    }&pageNum=${json.pageNum}`,
+    method: "get"
+  });
+}

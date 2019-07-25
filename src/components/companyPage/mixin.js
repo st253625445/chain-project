@@ -64,6 +64,14 @@ export default {
       } else {
         return "--";
       }
+    },
+    // 时间显示
+    timeFilter: val => {
+      if (val) {
+        return val.substring(0, 10);
+      } else {
+        return "--";
+      }
     }
   },
   created() {},
