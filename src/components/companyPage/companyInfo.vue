@@ -1,5 +1,5 @@
 <template>
-  <div class="listedInfoBox" v-loading="listedLoading">
+  <div class="companyInfoBox" v-loading="companyLoading">
     <div class="countBox">
       <div class="companyItemBox" v-loading="itemLoading[0]">
         <div class="title">{{ sideNavData[0] }}</div>
@@ -598,7 +598,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      listedLoading: true,
+      companyLoading: true,
       itemLoading: [],
       sideNavData: [
         "工商信息",
@@ -703,7 +703,7 @@ export default {
       return _text;
     },
     getData() {
-      this.listedLoading = true;
+      this.companyLoading = true;
       Promise.all([
         this.getBusinessInfo(),
         this.getImportPerson(),
@@ -716,7 +716,7 @@ export default {
         this.getChangeItem()
       ]).then(res => {
         console.log(res);
-        this.listedLoading = false;
+        this.companyLoading = false;
         this.setNav();
       });
     },
@@ -1011,13 +1011,24 @@ export default {
 </script>
 
 <style lang="less">
-.el-table .investChainList .cell {
-  white-space: pre-wrap;
-  .percentValue {
-    display: inline-block;
-    margin-right: 40px;
-    margin-left: 10px;
-    color: #4b61e7;
+.companyPage .companyInfoBox {
+  .el-table .investChainList .cell {
+    white-space: pre-wrap;
+    .percentValue {
+      display: inline-block;
+      margin-right: 40px;
+      margin-left: 10px;
+      color: #4b61e7;
+    }
+  }
+  .countBox {
+    padding-right: 130px;
+  }
+  .sideNav {
+    width: 100px;
+    ul {
+      width: 90px;
+    }
   }
 }
 </style>
