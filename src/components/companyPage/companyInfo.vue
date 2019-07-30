@@ -5,10 +5,10 @@
         <div class="title">{{ sideNavData[0] }}</div>
         <el-row>
           <el-col :span="6">
-            注册资本：{{ businessInfo.regCapitalNumClean }}
+            注册资本：{{ businessInfo.regCapitalNumClean }}万元人民币
           </el-col>
           <el-col :span="6">
-            实缴资本：{{ businessInfo.paidInCapital }}
+            实缴资本：{{ businessInfo.paidInCapital }}万元人民币
           </el-col>
           <el-col :span="6"> 经营状态：{{ businessInfo.regStatus }} </el-col>
           <el-col :span="6">
@@ -312,7 +312,7 @@
           </el-table-column>
           <el-table-column
             prop="regCapital"
-            label="注册资本"
+            label="注册资本(万元)"
             align="center"
             :show-overflow-tooltip="true"
           >
@@ -447,7 +447,7 @@
           </el-table-column>
           <el-table-column
             prop="regCapital"
-            label="注册资本"
+            label="注册资本(万元)"
             align="center"
             :show-overflow-tooltip="true"
           >
@@ -780,7 +780,7 @@ export default {
       return new Promise(resolve => {
         getActControl(_opt)
           .then(res => {
-            if (res.code === 200) {
+            if (res.code === 200 && res.data) {
               this.actualControllerData = [res.data];
             }
             resolve();
