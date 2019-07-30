@@ -289,6 +289,8 @@ export default {
       .el-col {
         text-indent: 0;
         padding-left: 26px;
+        word-wrap: break-word;
+        word-break: break-all;
         &.nopadding {
           flex: 1;
           padding-left: 0;
