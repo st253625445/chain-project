@@ -116,6 +116,13 @@ export const constantRouterMap = [
         component: () => import("@/views/pages/park")
       },
       {
+        path: "parkInfo",
+        name: "parkInfo",
+        hidden: true,
+        meta: { title: "产业园区信息", activePath: "park" },
+        component: () => import("@/views/pages/park-info")
+      },
+      {
         path: "parkChain",
         name: "parkChain",
         hidden: true,

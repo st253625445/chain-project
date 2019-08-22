@@ -1,126 +1,60 @@
 <template>
   <div class="parkInfoPage" v-loading="parkLoading">
     <div class="parkTopInfo">
-      <div class="title">{{ parkName | isNoData }}--企业画像</div>
-      <ul class="topInfoBox">
-        <li>
-          <span>{{ portraitData.regStatus | isNoData }}企业</span>
-          <span>
-            所属产业链:
-            <span
-              v-for="(item, index) in chainItems"
-              @click="linkToChain(item)"
-              class="linkSpan"
-              :key="index"
-            >
-              {{ item.chainName | isNoData }}
-              <span v-if="index < 4">,</span>
-            </span>
-          </span>
-        </li>
-        <li>
-          <span
-            >官网：
-            <a
-              :href="'http://' + portraitData.website"
-              target="_blank"
-              class="linkSpan"
-            >
-              {{ portraitData.website | isNoData }}
-            </a>
-          </span>
-          <span></span>
-        </li>
-        <li>
-          <span
-            >法人代表：{{
-              portraitData.legalPerson &&
-                portraitData.legalPerson.name | isNoData
-            }}</span
+      <div class="title">{{ parkName | isNoData }}--园区画像</div>
+      <div class="topInfo">
+        <span>{{ parkName | isNoData }}</span>
+        <span
+          >官网：
+          <a
+            :href="'http://' + portraitData.website"
+            target="_blank"
+            class="linkSpan"
           >
-          <span>所属集团：{{ portraitData.group | isNoData }}</span>
-        </li>
-        <li>
-          <span>电话：{{ portraitData.phoneNumber | isNoData }}</span>
-          <span>关联方图谱</span>
-        </li>
-        <li>
-          <span>地址：{{ portraitData.regLocation | isNoData }}</span>
-          <span></span>
-        </li>
-      </ul>
+            {{ portraitData.website | isNoData }}
+          </a>
+        </span>
+        <span>
+          园区类型：国家级
+        </span>
+        <span>
+          电话：051-2333333
+        </span>
+        <span>
+          地址：051-2333333
+        </span>
+        <span>
+          主导产业：XXX
+        </span>
+        <span>
+          园区面积：XXX
+        </span>
+        <span>
+          所在城市：XXX
+        </span>
+      </div>
     </div>
     <template v-if="!parkLoading">
-      <ListedInfo
-        :parkId="parkId"
-        v-if="!tabData[0].disable && tabIndexVal === 0"
-      />
-      <parkInfo
-        :parkId="parkId"
-        v-if="!tabData[1].disable && tabIndexVal === 1"
-      />
-      <JudicialRisk :parkId="parkId" v-if="1 === 2" />
+      <parkInfo :parkId="parkId" />
     </template>
   </div>
 </template>
 <script>
-import { getparkPortrait } from "@/api/getData";
-import ListedInfo from "@/components/parkPage/listedInfo";
 import parkInfo from "@/components/parkPage/parkInfo";
-import JudicialRisk from "@/components/parkPage/judicialRisk";
-import mixin from "@/components/parkPage/mixin";
+import mixin from "@/components/companyPage/mixin";
 export default {
   data() {
     return {
       parkLoading: true,
       parkId: "",
       parkName: "",
-      tabData: [
-        {
-          text: "上市信息",
-          disable: false
-        },
-        {
-          text: "基本情况",
-          disable: false
-        },
-        {
-          text: "司法风险",
-          disable: false
-        },
-        {
-          text: "经营风险",
-          disable: false
-        },
-        {
-          text: "财务状况",
-          disable: false
-        },
-        {
-          text: "发展状况",
-          disable: false
-        },
-        {
-          text: "资产状况",
-          disable: false
-        },
-        {
-          text: "经营状况",
-          disable: false
-        }
-      ],
-      tabIndexVal: 0,
       portraitData: {
         legalPerson: {}
       }
     };
   },
   mixins: [mixin],
-  components: {
-    ListedInfo,
-    parkInfo,
-    JudicialRisk
-  },
+  components: { parkInfo },
   computed: {
     chainItems: function() {
       if (this.portraitData.chainItemList) {
@@ -135,28 +69,15 @@ export default {
       this.parkId = query.parkId;
       this.parkName = query.parkName;
     }
-    getparkPortrait({ parkId: this.parkId })
-      .then(res => {
-        if (res.code === 200) {
-          this.portraitData = res.data;
-          if (res.data.parkCategory !== 1) {
-            this.tabData[0].disable = true;
-            this.tabIndexVal = 1;
-          }
-        }
-        this.parkLoading = false;
-      })
-      .catch(rej => {
-        console.log(rej);
-        this.parkLoading = false;
-        this.portraitData = {
-          legalPerson: {}
-        };
-      });
+    this.getParkInfo();
   },
   mounted() {},
   methods: {
-    // 所有产业链跳转
+    // 获取数据
+    getParkInfo() {
+      this.parkLoading = false;
+    },
+    // 所属产业链跳转
     linkToChain(data) {
       if (data) {
         let _query = {
@@ -169,11 +90,6 @@ export default {
         });
         window.open(routeData.href, "_blank");
       }
-    },
-    // tab切换
-    tabChange(index) {
-      console.log(index);
-      this.tabIndexVal = index;
     }
   }
 };
@@ -193,31 +109,24 @@ export default {
       line-height: 30px;
       margin-bottom: 20px;
     }
-    .topInfoBox {
+    .topInfo {
       display: flex;
+      flex-wrap: wrap;
       width: 100%;
-      li {
-        flex: 1;
-        padding: 0 20px;
+      > span {
+        margin-right: 80px;
         font-size: 14px;
         color: rgb(51, 51, 51);
         line-height: 34px;
-        > span {
-          display: block;
-          width: 100%;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
       }
     }
   }
   .countBox {
     width: calc(100% + 6px);
-    height: calc(100vh - 300px);
-    padding: 0 120px 30px 20px;
+    height: calc(100vh - 215px);
+    padding: 20px 120px 30px 20px;
     overflow: scroll;
-    .parkItemBox {
+    .companyItemBox {
       width: 100%;
       background: #fff;
       padding: 0 20px 15px;
